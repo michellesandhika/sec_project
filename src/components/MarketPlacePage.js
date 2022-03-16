@@ -14,60 +14,59 @@ const MainContainer = styled.div`
 `
 
 function MarketPlacePage() {
-  return (
-   <MainContainer>
-    <Grid container spacing={2}>
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+    return (
+        <MainContainer>
+            <Grid container spacing={2}>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
 
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
-
-      <Grid item xs={3}>
-        <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-      </Grid>
-    </Grid>
-    </MainContainer>
-  )
+                <Grid item xs={3}>
+                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                </Grid>
+            </Grid>
+        </MainContainer>
+    );
 }
 
 export default MarketPlacePage;

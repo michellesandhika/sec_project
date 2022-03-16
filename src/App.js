@@ -1,34 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Authentication from "./components/Authentication";
-import Account from "./components/Account";
-import Checkout from "./components/Checkout";
-import Header from "./components/Header";
+import Authentication from './components/Authentication';
+import Account from './components/Account';
+import Checkout from './components/Checkout';
+import Header from './components/Header';
 
-import "./App.css";
+import { getItems } from './services/firestore';    // testing
+
+import './App.css';
 
 import axios from './services/axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
-
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: "",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
 
 function App() {
     const [ secret, setSecret ] = useState('');
@@ -44,6 +29,8 @@ function App() {
         };
 
         getsecret();
+
+        getItems().then(content => console.log('getItems: ', content));     // testing
     }, []);
 
     const appearance = {
