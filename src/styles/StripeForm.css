@@ -1,7 +1,9 @@
 .stripeform__form > button {
-    margin-top: 15px;
+    margin: 15px 0 0 20px;
+    float: right;
 }
 
 .stripeform__form > h6 {
+    margin-top: 15px;
     color: var(--red)
 }

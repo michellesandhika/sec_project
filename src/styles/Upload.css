@@ -1,0 +1,44 @@
+.upload__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 180px);
+}
+
+.upload__container > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 380px;
+}
+
+.upload__container > form > button {
+    margin-top: 30px;
+}
+
+.upload__info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.upload__info > div {
+    margin-top: 20px;
+}
+
+.upload__file {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.upload__file > label {
+    width: fit-content;
+    white-space: nowrap;
+    margin-right: 12px;
+}

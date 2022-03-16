@@ -31,7 +31,7 @@ function Authentication() {
                 <TextField label='Username' type='text' required />
                 <TextField label='Password' type='password' required />
                 {menu === 1 && <TextField label='Confirm Password' type='password' required />}
-                <Button type='submit' variant='contained' disableRipple>{menu === 0 ? 'Login' : 'Sign up'}</Button>
+                <Button type='submit' variant='contained'>{menu === 0 ? 'Login' : 'Sign up'}</Button>
             </form>
 
             {menu === 0 && <div className='authentication__question'>

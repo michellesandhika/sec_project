@@ -3,6 +3,10 @@
     width: calc(100% - 320px);
 }
 
+.checkout__container > button {
+    float: right;
+}
+
 .checkout__review {
     margin-bottom: 60px;
 }

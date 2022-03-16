@@ -7,11 +7,11 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 
 import '../styles/StripeForm.css';
 
-function StripeForm({ total }) {
+function StripeForm({ secret }) {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
-
+    
     const [ message, setMessage ] = useState();
     const [ loading, setLoading ] = useState(false);
 
@@ -19,38 +19,36 @@ function StripeForm({ total }) {
         e.preventDefault();
         setLoading(true);
 
-        // confirm payment
-        const secretResponse = await axios({ 
-            method: 'POST', 
-            url: `/payment?total=${Math.round(total * 100)}`,
-        });
-
-        const secret = secretResponse.data.secret;
-        console.log(secret);
-        
-        const methodResponse = await stripe.confirmPayment({ 
+        const { error } = await stripe.confirmPayment({ 
             elements,
             confirmParams: {
-                return_url: '/',
+                return_url: 'http://localhost:3000',    // TODO: change to domain after hosted
             },
+            redirect: 'if_required',
         });
 
-        console.log(methodResponse);
-
-        // setMessage(error.type === 'card_error' || error.type === 'validation_error' ? error.message : 'An unexpected error occured.');
+        setMessage(error ? error.message : '');
         setLoading(false);
+        navigate('/');
+    };
+
+    const handleCancel = async () => {
+        const response = await axios({ 
+            method: 'POST', 
+            url: `/cancel?secret=${secret.split('_secret')[0]}`,
+        });
+
+        console.log('payment status: ', response.data.status);
+        navigate('/');
     };
 
     return (
-        <div className='stripeform__container'>
-            <h2>Payment</h2>
-
-            <form className='stripeform__form' onSubmit={handleSubmit}>
-                <PaymentElement />
-                <Button type='submit' variant='contained' disabled={loading || !stripe || !elements}>Confirm Purchase</Button>
-                {message && <h6>{message}</h6>}
-            </form>
-        </div>
+        <form className='stripeform__form' onSubmit={handleSubmit}>
+            <PaymentElement />
+            <Button type='submit' variant='contained' disabled={loading || !stripe || !elements}>Confirm Purchase</Button>
+            <Button onClick={handleCancel}  variant='outlined'>Cancel</Button>
+            {message && <h6>{message}</h6>}
+        </form>
     );
 }
 
