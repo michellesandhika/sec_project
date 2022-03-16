@@ -1,0 +1,16 @@
+.checkout__container {
+    padding: 80px 160px;
+    width: calc(100% - 320px);
+}
+
+.checkout__review {
+    margin-bottom: 60px;
+}
+
+.checkout__payment > div {
+    display: grid;
+    grid-template-columns: 4fr 2fr 2fr;
+    column-gap: 20px;
+    width: 100%;
+    margin-top: 30px;
+}

@@ -1,5 +1,21 @@
+:root {
+  --white: #FFF;
+  --black: #0A0908;
+
+  /* --primary: #C6AC8F; */
+  /* --secondary: #5E503F; */
+  /* --tertiary: #22333B; */
+
+  --primary: #1565c0;
+  --secondary: #2196f3;
+}
+
 body {
   margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

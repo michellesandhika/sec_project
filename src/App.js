@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Authentication from './components/Authentication';
+import Account from './components/Account';
+import Checkout from './components/Checkout';
+import Header from './components/Header';
+
 import './App.css';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [ clientSecret, setClientSecret ] = useState('');   // get client secret
+    const appearance = { theme: 'stripe' };
+    
+    return (
+        <div className='app'>
+            <BrowserRouter>
+                <Header />
+
+                <Routes>
+                    <Route exact path='/login' element={<Authentication />} />
+                    <Route exact path='/account' element={<Account />} />
+                    <Route exact path='/checkout' element={<Elements options={{ clientSecret, appearance }} stripe={promise}><Checkout /></Elements>} />
+                    <Route path='/' element={<Account />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;

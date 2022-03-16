@@ -1,0 +1,36 @@
+.authentication__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 150px);
+}
+
+.authentication__form {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+}
+
+.authentication__form > div {
+    margin-top: 20px;
+}
+
+.authentication__form > button {
+    align-self: center;
+    width: 40%;
+    margin: 20px;
+}
+
+.authentication__question > h6 > span {
+    cursor: pointer;
+    color: var(--primary);
+    text-decoration: underline;
+    margin-left: 8px;
+    transition: 0.2s;
+}
+
+.authentication__question > h6 > span:hover {
+    color: var(--secondary);
+}

@@ -1,0 +1,56 @@
+.account__container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding: 80px 160px;
+    width: calc(100% - 320px);
+}
+
+.account__sidebar {
+    padding: 0 40px 0 20px;
+}
+
+.account__sidebar > div {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    transition: 0.1s;
+}
+
+.account__sidebar > div > p {
+    margin-left: 18px;
+}
+
+.account__sidebar > div[status=active] {
+    color: var(--primary);
+}
+
+.account__content {
+    padding: 0 20px 0 40px;
+    min-height: 75vh;
+    border-left: 1px solid var(--black);
+}
+
+.account__profile > h2 {
+    margin-bottom: 40px;
+}
+
+.account__profile > form {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+}
+
+.account__profile > form > div {
+    margin: 10px 0 10px;
+}
+
+.account__profile > form > button {
+    width: 50%;
+    margin-top: 10px;
+}
+
+.account__orders {
+    width: 100%;
+}
