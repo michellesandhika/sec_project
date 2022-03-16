@@ -5,6 +5,11 @@ import Authentication from './components/Authentication';
 import Account from './components/Account';
 import Checkout from './components/Checkout';
 import Header from './components/Header';
+import {useParams} from "react-router-dom";
+
+
+import MarketPlacePage from './components/MarketPlacePage';
+import ProductDescriptionPage from './components/ProductDescriptionPage'
 
 import { getItems } from './services/firestore';    // testing
 
@@ -46,12 +51,12 @@ function App() {
         <div className='app'>
             <BrowserRouter>
                 <Header />
-
                 <Routes>
                     <Route exact path='/login' element={<Authentication />} />
                     <Route exact path='/account' element={<Account />} />
+                    <Route path='/productdescription/:id' element={<ProductDescriptionPage/>} />
                     <Route exact path='/checkout' element={secret && <Elements options={options} stripe={promise}><Checkout /></Elements>} />
-                    <Route path='/' element={<Account />} />
+                    <Route path='/' element={<MarketPlacePage />} />
                 </Routes>
             </BrowserRouter>
         </div>
