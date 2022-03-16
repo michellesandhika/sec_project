@@ -6,7 +6,7 @@ import '../styles/Authentication.css';
 function Authentication() {
     const [ menu, setMenu ] = useState(0);
 
-    const submit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (menu === 0)
@@ -27,7 +27,7 @@ function Authentication() {
         <main className='authentication__container'>
             <h1>{menu === 0 ? 'Login' : 'Sign up'}</h1>
 
-            <form className='authentication__form' onSubmit={submit}>
+            <form className='authentication__form' onSubmit={handleSubmit}>
                 <TextField label='Username' type='text' required />
                 <TextField label='Password' type='password' required />
                 {menu === 1 && <TextField label='Confirm Password' type='password' required />}

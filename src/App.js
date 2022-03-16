@@ -8,13 +8,35 @@ import Header from './components/Header';
 
 import './App.css';
 
+import axios from './services/axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
 
 function App() {
-    const [ clientSecret, setClientSecret ] = useState('');   // get client secret
-    const appearance = { theme: 'stripe' };
+    const [ secret, setSecret ] = useState('');
+
+    useEffect(() => {
+        const getsecret = async () => {
+            await axios({ 
+                method: 'POST', 
+                url: '/setup',
+            }).then(response => {
+                setSecret(response.data.secret);
+            });
+        };
+
+        getsecret();
+    }, []);
+
+    const appearance = {
+        theme: 'stripe',
+    };
+
+    const options = {
+        clientSecret: secret,
+        appearance,
+    };
     
     return (
         <div className='app'>
@@ -24,7 +46,7 @@ function App() {
                 <Routes>
                     <Route exact path='/login' element={<Authentication />} />
                     <Route exact path='/account' element={<Account />} />
-                    <Route exact path='/checkout' element={<Elements options={{ clientSecret, appearance }} stripe={promise}><Checkout /></Elements>} />
+                    <Route exact path='/checkout' element={secret && <Elements options={options} stripe={promise}><Checkout /></Elements>} />
                     <Route path='/' element={<Account />} />
                 </Routes>
             </BrowserRouter>

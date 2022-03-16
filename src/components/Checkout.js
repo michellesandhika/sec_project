@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell, IconButton } from '@mui/material';
+import { Table, TableHead, TableBody, TableRow, TableCell, IconButton } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
-// import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
-import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
-// import StripeTextField from './StripeTextField';
+import StripeForm from './StripeForm';
 
 import '../styles/Checkout.css';
 
 function Checkout() {
-    const stripe = useStripe();
-    const elements = useElements();
-
-    const [message, setMessage] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const [ cart, setCart ] = useState([
+    const cart = [
         { id: '12', name: 'item name', price: 123.45 },
         { id: '34', name: 'item name', price: 123.45 },
         { id: '56', name: 'item name', price: 123.45 },
         { id: '78', name: 'item name', price: 123.45 },
         { id: '90', name: 'item name', price: 123.45 },
-    ]);
+    ];
+
+    const removeItem = (item) => {
+        console.log('remove:', item)
+    };  
 
     return (
         <main className='checkout__container'>
@@ -45,50 +40,14 @@ function Checkout() {
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>${item.price}</TableCell>
                                 <TableCell style={{ width: '50px' }}>
-                                    <IconButton><DeleteOutlinedIcon /></IconButton>
+                                    <IconButton onClick={() => removeItem(item)}><DeleteOutlinedIcon /></IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </div>
-            <div className='checkout__payment'>
-                <h2>Payment</h2>
-                <form>
-                    <PaymentElement />
-                    <Button type='submit' variant='contained'>Confirm Purchase</Button>
-                </form>
-
-                {/* <div>
-                    <TextField 
-                        label='Card Number' 
-                        InputLabelProps={{ shrink: true }} 
-                        InputProps={{ 
-                            inputComponent: StripeTextField, 
-                            inputProps: { component: CardNumberElement } 
-                        }} 
-                        required 
-                    />
-                    <TextField 
-                        label='EXP' 
-                        InputLabelProps={{ shrink: true }} 
-                        InputProps={{ 
-                            inputComponent: StripeTextField, 
-                            inputProps: { component: CardExpiryElement } 
-                        }} 
-                        required 
-                    />
-                    <TextField 
-                        label='CVC' 
-                        InputLabelProps={{ shrink: true }} 
-                        InputProps={{ 
-                            inputComponent: StripeTextField, 
-                            inputProps: { component: CardCvcElement } 
-                        }} 
-                        required 
-                    />
-                </div> */}
-            </div>
+            <StripeForm total={5} />
         </main>
     );
 }
