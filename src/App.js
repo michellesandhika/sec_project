@@ -22,7 +22,7 @@ function App() {
                     <Route exact path='/account' element={<Account />} />
                     <Route exact path='/checkout' element={<Checkout />} />
                     <Route path='/productdescription/:id' element={<ProductDescriptionPage/>} />
-                    <Route path='/' element={<MarketPlacePage />} />
+                    <Route exact path='/' element={<MarketPlacePage />} />
                 </Routes>
             </BrowserRouter>
         </div>

@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import styled from '@emotion/styled';
 import MarketPlaceCard from './MarketPlaceCard';
 import { useNavigate } from 'react-router-dom';
+import { getItems, getTransactions } from '../services/firestore';
+import { useState, useEffect } from 'react';
 import ProductDescriptionPage from './ProductDescriptionPage';
 
 
@@ -12,65 +14,57 @@ const MainContainer = styled.div`
    margin-right:20px;
    width: 90%;
 `
-
-function MarketPlacePage() {
-
+const MarketPlacePage = () => {
+  
+    const [info , setInfo] = useState([]);
     const navigate = useNavigate();
 
-    /* TODO: Map the title, description and picture */
+    // useEffect(() => {
+    //     setInfo(info);
+    // }, [info]);
+  
+    // Start the fetch operation as soon as
+    // the page loads
+
+
+    window.addEventListener('load', () => {
+        Fetchdata();
+    });
+
+    function navigatetoID(id){
+        var pathName = '/productdescription/' + id
+        navigate(pathName)
+        
+    }
+
+    const Fetchdata = ()=>{
+        getItems().then((querySnapshot) => {
+             
+            // Loop through the data and store
+            // it in array to display
+            querySnapshot.forEach(element => {
+                var data = element;
+                setInfo(arr => [...arr , data]);
+                  
+            });
+        })
+        console.log(info)
+    }
+
     return (
         <MainContainer>
             <Grid container spacing={2}>
-                <Grid item xs={3} onClick={() => navigate('/productdescription/2')}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here moa lot of other things here moa lot of other things here moa lot of other things here moa lot of other things here mo'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
-                </Grid>
+                {
+                    info.map((data) => (
+                        <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
+                            <MarketPlaceCard title={data.Name} description={data.Description} picture={''}></MarketPlaceCard>
+                        </Grid>
+                    ))
+                }
             </Grid>
         </MainContainer>
     );
 }
+  
 
 export default MarketPlacePage;

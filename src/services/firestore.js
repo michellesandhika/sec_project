@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { firestore } from './config';
 
 export const getItems = async () => {
@@ -10,6 +10,16 @@ export const getItems = async () => {
     });
 
     return items;
+};
+
+export function getItem(ID){
+    let items = [];
+
+    const docRef = doc(firestore, "Item", ID);
+
+    let getDocResult = getDoc(docRef);
+    return getDocResult
+
 };
 
 export const getTransactions = async () => {
