@@ -4,16 +4,21 @@ import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell } f
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import MarketPlaceCard from './MarketPlaceCard';
+import { useStateContext } from '../services/StateContext';
 import { getItems, getTransactions } from '../services/firestore';
+import { getAuth, signOut } from "firebase/auth";
 
 import '../styles/Account.css';
 
 function Account() {
     const dateFormat = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+    const auth = getAuth();
+    const [ {}, dispatch ] = useStateContext();
 
-    const [ menu, setMenu ] = useState(1);
+    const [ menu, setMenu ] = useState(0);
     const [ items, setItems ] = useState([]);
     const [ transactions, setTransactions ] = useState([]);
 
@@ -25,6 +30,20 @@ function Account() {
     const changePassword = (e) => {
         e.prevenTableCellefault();
         console.log('change password');
+    };
+
+    const logout = () => {
+        signOut(auth)
+        .then(() => {
+            dispatch({
+                type: 'SET_USER',
+                user: null,
+            });
+        })
+        .catch((error) => {
+            const { code, message } = error;
+            console.log(code, message);
+        });
     };
     
     return ( 
@@ -42,6 +61,9 @@ function Account() {
                 <div onClick={() => setMenu(2)} status={menu === 2 ? 'active' : 'inactive'}>
                     <PersonOutlineOutlinedIcon />
                     <p>Change Password</p>
+                </div>
+                <div>
+                    <Button onClick={logout} variant='contained' endIcon={<LogoutOutlinedIcon />}>Logout</Button>
                 </div>
             </div>
 
