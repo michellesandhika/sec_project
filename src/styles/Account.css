@@ -22,6 +22,10 @@
     margin-left: 18px;
 }
 
+.account__sidebar > div:last-child {
+    margin-top: 30px;
+}
+
 .account__sidebar > div[status=active] {
     color: var(--primary);
 }

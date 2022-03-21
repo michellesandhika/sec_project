@@ -10,20 +10,12 @@ import '../styles/Header.css';
 function Header() {
     const navigate = useNavigate();
 
-    const openAccount = () => {
-        // if user is loged in
-        // navigate('/account')
-
-        // else
-        navigate('/login')
-    };
-
     return (
         <header className='header__container'>
             <h1 className='header__logo' onClick={() => navigate('/')}>LOGO</h1>
             <div className='header__navigations'>
                 <div onClick={() => navigate('/upload')}><FileUploadOutlinedIcon /></div>
-                <div onClick={() => openAccount()}><PersonOutlineOutlinedIcon /></div>
+                <div onClick={() => navigate('/account')}><PersonOutlineOutlinedIcon /></div>
                 <div onClick={() => navigate('/checkout')}><ShoppingCartOutlinedIcon /></div>
             </div>
         </header>

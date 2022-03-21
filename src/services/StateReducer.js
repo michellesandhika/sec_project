@@ -1,4 +1,5 @@
 export const initialState = {
+    user: null,
     cart: [],
 };
 
@@ -32,6 +33,9 @@ export const StateReducer = (state, action) => {
 
         case 'EMPTY_CART':
             return { ...state, cart: [] };
+
+        case 'SET_USER':
+            return { ...state, user: action.user };
 
         default:
             return state;
