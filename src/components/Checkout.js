@@ -5,6 +5,9 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import StripeForm from './StripeForm';
 import '../styles/Checkout.css';
 
+import { useStateContext } from '../services/StateContext';
+import { getSubtotal } from '../services/StateReducer';
+
 import axios from '../services/axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -12,13 +15,8 @@ const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
 
 function Checkout() {
     const lastStep = 1;
-    const cart = [
-        { id: '12', name: 'item name', price: 123.45 },
-        { id: '34', name: 'item name', price: 123.45 },
-        { id: '56', name: 'item name', price: 123.45 },
-        { id: '78', name: 'item name', price: 123.45 },
-        { id: '90', name: 'item name', price: 123.45 },
-    ];
+
+    const [ { cart }, dispatch ] = useStateContext();
     
     const [ menu, setMenu ] = useState(0);
     const [ secret, setSecret ] = useState('');
@@ -30,7 +28,7 @@ function Checkout() {
 
             const response = await axios({ 
                 method: 'POST', 
-                url: '/payment?total=500',  // TODO: change to get total from cart
+                url: `/payment?total=${getSubtotal(cart)}`,
             });
             
             setSecret(response.data.secret);
@@ -38,7 +36,7 @@ function Checkout() {
         };
         
         getsecret();
-    }, [menu]);
+    }, [menu, cart]);
 
     const appearance = {
         theme: 'stripe',
@@ -49,15 +47,21 @@ function Checkout() {
         appearance,
     };
 
-    // TODO: remove item in redux
     const removeItem = (item) => {
         console.log('remove:', item);   
+
+        dispatch({
+            type: 'REMOVE_CART',
+            item: item,
+        });
     };
 
     return (
         <main className='checkout__container'>
             {menu === 0 && <div className='checkout__review'>
-                <h2>Review Orders</h2>
+                <div>
+                    <h2>Review Orders</h2>
+                </div>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
@@ -71,8 +75,8 @@ function Checkout() {
                         {cart.map(item => (
                             <TableRow key={item.id}>
                                 <TableCell>{item.id}</TableCell>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell>${item.price}</TableCell>
+                                <TableCell>{item.Name}</TableCell>
+                                <TableCell>${item.Price}</TableCell>
                                 <TableCell style={{ width: '50px' }}>
                                     <IconButton onClick={() => removeItem(item)}><DeleteOutlinedIcon /></IconButton>
                                 </TableCell>
@@ -80,6 +84,9 @@ function Checkout() {
                         ))}
                     </TableBody>
                 </Table>
+                <div>
+                    <h4>Total: <span>${getSubtotal(cart)}</span></h4>
+                </div>
             </div>}
 
             {menu === 1 && <div className='stripeform__container'>
