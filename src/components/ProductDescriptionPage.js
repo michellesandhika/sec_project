@@ -5,9 +5,22 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { useStateContext } from '../services/StateContext';
 
 export default function ProductDescriptionPage() {
     const {id} = useParams();
+    const [ {}, dispatch ] = useStateContext();
+
+    // TODO: call this function when user click on add to cart
+    const addItem = (item) => {
+        console.log('add:', item);   
+
+        dispatch({
+            type: 'ADD_CART',
+            item: item,
+        });
+    };
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>

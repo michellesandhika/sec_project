@@ -1,42 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+
+import MarketPlaceCard from './MarketPlaceCard';
+import { getItems, getTransactions } from '../services/firestore';
 
 import '../styles/Account.css';
 
 function Account() {
-    const [ menu, setMenu ] = useState(1);
-    const [ orders, setOrders ] = useState([
-        { order_number: '12', date: '1 January 2022', total: 123.45 },
-        { order_number: '34', date: '1 January 2022', total: 123.45 },
-        { order_number: '56', date: '1 January 2022', total: 123.45 },
-        { order_number: '78', date: '1 January 2022', total: 123.45 },
-        { order_number: '90', date: '1 January 2022', total: 123.45 },
-    ]);
+    const dateFormat = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
 
+    const [ menu, setMenu ] = useState(1);
+    const [ items, setItems ] = useState([]);
+    const [ transactions, setTransactions ] = useState([]);
+
+    useEffect(() => {
+        getItems().then(content => setItems(content));                  // TODO: change to this users items
+        getTransactions().then(content => setTransactions(content));    // TODO: change to this users transactions
+    }, []);
+    
     const changePassword = (e) => {
         e.prevenTableCellefault();
         console.log('change password');
     };
-
+    
     return ( 
         <main className='account__container'>
             <div className='account__sidebar'>
                 <h2>Welcome back, [username]</h2>
                 <div onClick={() => setMenu(0)} status={menu === 0 ? 'active' : 'inactive'}>
-                    <PersonOutlineOutlinedIcon />
-                    <p>Account</p>
+                    <PaletteOutlinedIcon />
+                    <p>My Arts</p>
                 </div>
                 <div onClick={() => setMenu(1)} status={menu === 1 ? 'active' : 'inactive'}>
                     <Inventory2OutlinedIcon />
-                    <p>Orders</p>
+                    <p>My Transactions</p>
+                </div>
+                <div onClick={() => setMenu(2)} status={menu === 2 ? 'active' : 'inactive'}>
+                    <PersonOutlineOutlinedIcon />
+                    <p>Change Password</p>
                 </div>
             </div>
 
             <div className='account__content'>
-                {menu === 0 && <div className='account__profile'>
+                {menu === 0 && <div>
+                    {items.map(item => (
+                        <MarketPlaceCard key={item.id} title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                    ))}
+                </div>}
+
+                {menu === 1 && <Table className='account__transactions' stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Date</TableCell>
+                            <TableCell>To</TableCell>
+                            <TableCell>Total</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {transactions.map(item => (
+                            <TableRow key={item.id}>
+                                <TableCell>{item.id}</TableCell>
+                                <TableCell>{item.Time.toDate().toLocaleDateString('en-US', dateFormat)}</TableCell>
+                                <TableCell>{item.Seller}</TableCell>
+                                <TableCell>${item.Paid}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>}
+
+                {menu === 2 && <div className='account__profile'>
                     <h3>Change Password</h3>
                     <form onSubmit={(e) => changePassword(e)}>
                         <TextField label='Current Password' type='password' required />
@@ -46,25 +83,6 @@ function Account() {
                         <Button type='submit' variant='contained'>Confirm</Button>
                     </form>
                 </div>}
-
-                {menu === 1 && <Table className='account__orders' stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Order Number</TableCell>
-                            <TableCell>Date</TableCell>
-                            <TableCell>Total</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {orders.map(item => (
-                            <TableRow key={item.order_number}>
-                                <TableCell>{item.order_number}</TableCell>
-                                <TableCell>{item.date}</TableCell>
-                                <TableCell>${item.total}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>}
             </div>
         </main>
     );
