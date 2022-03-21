@@ -15,52 +15,47 @@ const MainContainer = styled.div`
    width: 90%;
 `
 const MarketPlacePage = () => {
-  
-    const [info , setInfo] = useState([]);
     const navigate = useNavigate();
+    const [ info , setInfo ] = useState([]);
 
-    // useEffect(() => {
-    //     setInfo(info);
-    // }, [info]);
+    useEffect(() => {
+        getItems().then(content => setInfo(content));
+    }, []);
+
+    const navigatetoID = (id) => {
+        const pathName = '/productdescription/' + id
+        navigate(pathName);   
+    };
   
     // Start the fetch operation as soon as
     // the page loads
 
+    // window.addEventListener('load', () => {
+    //     Fetchdata();
+    // });
 
-    window.addEventListener('load', () => {
-        Fetchdata();
-    });
-
-    function navigatetoID(id){
-        var pathName = '/productdescription/' + id
-        navigate(pathName)
-        
-    }
-
-    const Fetchdata = ()=>{
-        getItems().then((querySnapshot) => {
+    // const Fetchdata = ()=>{
+    //     getItems().then((querySnapshot) => {
              
-            // Loop through the data and store
-            // it in array to display
-            querySnapshot.forEach(element => {
-                var data = element;
-                setInfo(arr => [...arr , data]);
+    //         // Loop through the data and store
+    //         // it in array to display
+    //         querySnapshot.forEach(element => {
+    //             var data = element;
+    //             setInfo(arr => [...arr , data]);
                   
-            });
-        })
-        console.log(info)
-    }
+    //         });
+    //     })
+    //     console.log(info)
+    // }
 
     return (
         <MainContainer>
             <Grid container spacing={2}>
-                {
-                    info.map((data) => (
-                        <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
-                            <MarketPlaceCard title={data.Name} description={data.Description} picture={''}></MarketPlaceCard>
-                        </Grid>
-                    ))
-                }
+                {info.map((data) => (
+                    <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
+                        <MarketPlaceCard title={data.Name} description={data.Description} picture={''}></MarketPlaceCard>
+                    </Grid>
+                ))}
             </Grid>
         </MainContainer>
     );
