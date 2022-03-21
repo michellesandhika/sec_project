@@ -9,21 +9,22 @@ import styled from '@emotion/styled';
 import ProductDescriptionPage from './ProductDescriptionPage';
 
 const PriceArea = styled.div`
-    float:right;
-    /* background-color: red; */
-    width: 10%;
     font-size:20px;
-    padding-right: 10px;
-    align-items: center;
-    margin-top: 5%
+    text-align: right;
+    margin-top: 5%;
+    display: block;
 
 `
 
 const CardArea = styled.div`
     width: 80%;
-    /* background-color:green; */
     float:left;
     padding-bottom: 10px;
+    /* background-color: yellow; */
+`
+
+const PriceText = styled.text`
+    text-align:right;
 `
 
 export default function MarketPlaceCard(props) {
@@ -51,7 +52,7 @@ export default function MarketPlaceCard(props) {
                 </CardArea> 
 
                 <PriceArea>
-                    $100
+                    <PriceText>$ {props.price}</PriceText>
                 </PriceArea>
                 
 

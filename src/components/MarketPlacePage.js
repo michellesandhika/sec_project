@@ -26,34 +26,13 @@ const MarketPlacePage = () => {
         const pathName = '/productdescription/' + id
         navigate(pathName);   
     };
-  
-    // Start the fetch operation as soon as
-    // the page loads
-
-    // window.addEventListener('load', () => {
-    //     Fetchdata();
-    // });
-
-    // const Fetchdata = ()=>{
-    //     getItems().then((querySnapshot) => {
-             
-    //         // Loop through the data and store
-    //         // it in array to display
-    //         querySnapshot.forEach(element => {
-    //             var data = element;
-    //             setInfo(arr => [...arr , data]);
-                  
-    //         });
-    //     })
-    //     console.log(info)
-    // }
 
     return (
         <MainContainer>
             <Grid container spacing={2}>
                 {info.map((data) => (
                     <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
-                        <MarketPlaceCard title={data.Name} description={data.Description} picture={''}></MarketPlaceCard>
+                        <MarketPlaceCard title={data.Name} description={data.Description} picture={''} price={data.Price}></MarketPlaceCard>
                     </Grid>
                 ))}
             </Grid>
