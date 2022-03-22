@@ -10,6 +10,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
 import { getItems, getTransactions } from '../services/firestore';
+import { validatePassword } from '../services/utilities';
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut, sendEmailVerification } from 'firebase/auth';
 
 import '../styles/Account.css';
@@ -65,6 +66,11 @@ function Account() {
     const changePassword = async (data) => {
         if (data.new !== data.confirm) {
             setPasswordError('Your password does not match.');
+            return;
+        }
+
+        if (!validatePassword(data.new)) {
+            setPasswordError('Your password must be at least 8 characters and contains an uppercase letter, lowercase letter, and numbers.');
             return;
         }
 

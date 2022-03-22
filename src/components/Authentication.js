@@ -6,11 +6,12 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { app } from "../services/config";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useStateContext } from '../services/StateContext';
+import { validatePassword } from '../services/utilities';
 import "../styles/Authentication.css";
 
 function Authentication() {
     const auth = getAuth(app);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, setValue } = useForm();
     
     const [ {}, dispatch ] = useStateContext();
     const [ menu, setMenu ] = useState(0);
@@ -25,6 +26,12 @@ function Authentication() {
     };
 
     const login = (data) => {
+        if (!data.captcha) {
+            setError(true);
+            setErrorMessage('Please verify that you\'re not a robot.');
+            return;
+        }
+        
         signInWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
             if (!userCredential.user.emailVerified) {
@@ -59,11 +66,21 @@ function Authentication() {
     };
 
     const signup = (data) => {
-        // TODO: check strong password
+        if (!data.captcha) {
+            setError(true);
+            setErrorMessage('Please verify that you\'re not a robot.');
+            return;
+        }
 
         if (data.password !== data.confirmPassword) {
             setError(true);
             setErrorMessage('Your password does not match.');
+            return;
+        }
+
+        if (!validatePassword(data.password)) {
+            setError(true);
+            setErrorMessage('Your password must be at least 8 characters and contains an uppercase letter, lowercase letter, and numbers.');
             return;
         }
 
@@ -93,9 +110,8 @@ function Authentication() {
         setError(false);
     };
 
-    // QUESTION: do we need this ??
     const handleCaptcha = (value) => {
-        console.log("Captcha value:", value);
+        setValue('captcha', value);
     };
 
     return (
