@@ -40,11 +40,11 @@ function App() {
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    <Route exact path='/upload' element={<Upload />} />
+                    <Route exact path='/' element={<MarketPlacePage />} />
+                    <Route exact path='/upload' element={user ? <Upload /> : <Authentication />} />
                     <Route exact path='/account' element={user ? <Account /> : <Authentication />} />
                     <Route exact path='/checkout' element={<Checkout />} />
                     <Route path='/productdescription/:id' element={<ProductDescriptionPage/>} />
-                    <Route exact path='/' element={<MarketPlacePage />} />
                 </Routes>
             </BrowserRouter>
         </div>

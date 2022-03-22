@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { TextField, Button, Alert } from "@mui/material";
 import { useForm } from "react-hook-form";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { app } from "../services/config";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useStateContext } from '../services/StateContext';
 import "../styles/Authentication.css";
 
@@ -26,6 +27,14 @@ function Authentication() {
     const login = (data) => {
         signInWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
+            if (!userCredential.user.emailVerified) {
+                sendEmailVerification(userCredential.user);
+                setErrorMessage('A new verification link has been sent to your email account. Please verify your email before logging in.');
+
+                // TODO: uncomment this line before deployment
+                // return;
+            }
+
             redirect(userCredential.user);
         })
         .catch((error) => {
@@ -50,6 +59,8 @@ function Authentication() {
     };
 
     const signup = (data) => {
+        // TODO: check strong password
+
         if (data.password !== data.confirmPassword) {
             setError(true);
             setErrorMessage('Your password does not match.');
@@ -58,7 +69,8 @@ function Authentication() {
 
         createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
-            redirect(userCredential.user);
+            sendEmailVerification(userCredential.user);
+            redirect(userCredential.user);  
         })
         .catch((error) => {
             const { code, message } = error;
@@ -81,6 +93,11 @@ function Authentication() {
         setError(false);
     };
 
+    // QUESTION: do we need this ??
+    const handleCaptcha = (value) => {
+        console.log("Captcha value:", value);
+    };
+
     return (
         <main className="authentication__container">
             <h1>{menu === 0 ? "Login" : "Sign up"}</h1>
@@ -93,24 +110,22 @@ function Authentication() {
                 {menu === 1 && (
                     <TextField label="Confirm Password" type="password" required {...register("confirmPassword")} />
                 )}
+                <div className="authentication__captcha">
+                    <ReCAPTCHA sitekey="6LdRy_0eAAAAAL08kTosI_LnAgBf8SDI_XSiWvQz" onChange={handleCaptcha} />
+                </div>
 
                 <Button type="submit" variant="contained">{menu === 0 ? "Login" : "Sign up"}</Button>
             </form>
 
             {menu === 0 && (
                 <div className="authentication__question">
-                    <h6>
-                        Not a member?<span onClick={() => setMenu(1)}>Sign up</span>
-                    </h6>
+                    <h6>Not a member?<span onClick={() => setMenu(1)}>Sign up</span></h6>
                 </div>
             )}
 
             {menu === 1 && (
                 <div className="authentication__question">
-                    <h6>
-                        Already have an account?
-                        <span onClick={() => setMenu(0)}>Log in</span>
-                    </h6>
+                    <h6>Already have an account?<span onClick={() => setMenu(0)}>Log in</span></h6>
                 </div>
             )}
         </main>

@@ -40,6 +40,20 @@
     margin-bottom: 40px;
 }
 
+.account__profile > div {
+    margin-bottom: 50px;
+    width: 450px;
+}
+
+.account__profile > div > div {
+    margin-top: 15px;
+}
+
+.account__profile > div > button {
+    width: 50%;
+    margin-top: 20px;
+}
+
 .account__profile > form {
     display: flex;
     flex-direction: column;

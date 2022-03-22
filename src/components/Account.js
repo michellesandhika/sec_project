@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form';
 
 import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell, Alert, Grid } from '@mui/material';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
 import { getItems, getTransactions } from '../services/firestore';
-import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut } from 'firebase/auth';
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut, sendEmailVerification } from 'firebase/auth';
 
 import '../styles/Account.css';
 
@@ -19,11 +19,14 @@ function Account() {
     const [ {}, dispatch ] = useStateContext();
 
     const auth = getAuth();
-    const { register, handleSubmit } = useForm();
+    const user = auth.currentUser;
+    const { register, handleSubmit, reset } = useForm();
 
-    const [ success, setSuccess ] = useState(false);
-    const [ error, setError ] = useState(false);
-    const [ errorMessage, setErrorMessage ] = useState('');
+    const [ verifySuccess, setVerifySuccess ] = useState(false);
+    const [ verifyError, setVerifyError ] = useState('');
+
+    const [ passwordSuccess, setPasswordSuccess ] = useState(false);
+    const [ passwordError, setPasswordError ] = useState('');
 
     const [ menu, setMenu ] = useState(0);
     const [ items, setItems ] = useState([]);
@@ -33,34 +36,59 @@ function Account() {
         getItems().then(content => setItems(content));                  // TODO: change to this users items
         getTransactions().then(content => setTransactions(content));    // TODO: change to this users transactions
     }, []);
+
+    useEffect(() => {
+        setVerifySuccess(false);
+        setPasswordSuccess(false);
+        setPasswordError('');
+        reset();
+    }, [menu, reset]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setVerifySuccess(false);
+            setVerifyError('');
+        }, 5000);
+        
+        return () => clearTimeout(timer);
+    }, [verifySuccess, verifyError]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setPasswordSuccess(false);
+            setPasswordError('');
+        }, 5000);
+        
+        return () => clearTimeout(timer);
+    }, [passwordSuccess, passwordError]);
     
     const changePassword = async (data) => {
         if (data.new !== data.confirm) {
-            setError(true);
-            setErrorMessage('Your password does not match.');
+            setPasswordError('Your password does not match.');
             return;
         }
 
-        const user = auth.currentUser;
         const credentials = EmailAuthProvider.credential(user.email, data.current);
 
         reauthenticateWithCredential(user, credentials)
         .then(() => {
             updatePassword(user, data.new)
             .then(() => {
-                setSuccess(true);
+                setPasswordSuccess(true);
+                setPasswordError('');
+                reset();
             })
             .catch((error) => {
                 const { code, message } = error;
                 console.log(code, message);
     
-                setError(true);
-                setErrorMessage('Something went wrong. Please try again.');
+                setPasswordSuccess(false);
+                setPasswordError('Something went wrong. Please try again.');
             });
         })
-        .catch((error) => {
-            setError(true);
-            setErrorMessage('Failed to Re-Authenticate. Please try again.');
+        .catch(() => {
+            setPasswordSuccess(false);
+            setPasswordError('Failed to change password. Your current password might be incorrect.');
         });
     };
 
@@ -77,11 +105,33 @@ function Account() {
             console.log(code, message);
         });
     };
-    
+
+    const sendVerification = () => {
+        sendEmailVerification(user)
+        .then(() => {
+            setVerifySuccess(true);
+        })
+        .catch((error) => {
+            const { code, message } = error;
+            
+            setVerifyError(true);
+            console.log(code, message);
+
+            switch (code) {
+                case 'auth/too-many-requests':
+                    setVerifyError('You\'ve requested for too many verification link. Please try again later.');
+                    break;
+                
+                default:
+                    setVerifyError('Something went wrong. Please try again.');
+            };
+        });
+    };
+
     return ( 
         <main className='account__container'>
             <div className='account__sidebar'>
-                <h2>Welcome back, [username]</h2>
+                <h2>Welcome back!</h2>
                 <div onClick={() => setMenu(0)} status={menu === 0 ? 'active' : 'inactive'}>
                     <PaletteOutlinedIcon />
                     <p>My Arts</p>
@@ -91,8 +141,8 @@ function Account() {
                     <p>My Transactions</p>
                 </div>
                 <div onClick={() => setMenu(2)} status={menu === 2 ? 'active' : 'inactive'}>
-                    <PersonOutlineOutlinedIcon />
-                    <p>Change Password</p>
+                    <SettingsOutlinedIcon />
+                    <p>Settings</p>
                 </div>
                 <div>
                     <Button onClick={logout} variant='contained' endIcon={<LogoutOutlinedIcon />}>Logout</Button>
@@ -130,14 +180,25 @@ function Account() {
                 </Table>}
 
                 {menu === 2 && <div className='account__profile'>
+                    <h3>Account Verification</h3>
+                    <div>
+                        {user.emailVerified && <Alert severity='success'>Verification Status: Verified</Alert>}                        
+                        {!user.emailVerified && <Alert severity='warning'>Verification Status: Not Verified</Alert>}                        
+                        
+                        {verifySuccess && <Alert severity='success'>A new verification link has been sent to your email account.</Alert>}                        
+                        {verifyError !== '' && <Alert severity='error'>{verifyError}</Alert>}                        
+
+                        {!user.emailVerified && <Button type='submit' variant='contained' onClick={sendVerification}>Verify Account</Button>}
+                    </div>
+
                     <h3>Change Password</h3>
                     <form onSubmit={handleSubmit(changePassword)}>
                         <TextField label='Current Password' type='password' required {...register('current')} />
                         <TextField label='New Password' type='password' required {...register('new')} />
                         <TextField label='Confirm New Password' type='password' required {...register('confirm')} />
 
-                        {success && <Alert severity='success'>Changed Password Successfully!</Alert>}
-                        {error && <Alert severity='error'>{errorMessage}</Alert>}
+                        {passwordSuccess && <Alert severity='success'>Changed Password Successfully!</Alert>}
+                        {passwordError !== '' && <Alert severity='error'>{passwordError}</Alert>}
 
                         <Button type='submit' variant='contained'>Confirm</Button>
                     </form>
