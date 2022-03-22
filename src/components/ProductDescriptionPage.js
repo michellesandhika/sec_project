@@ -73,21 +73,8 @@ export default function ProductDescriptionPage() {
     const [info , setInfo] = useState([]);
 
     useEffect(() => {
-        console.log("try", info);
+        getItem(id).then(content => setInfo(content.data()));
     }, [info]);
-
-
-    window.addEventListener('load', () => {
-        Fetchdata(id)
-    });
-
-    const Fetchdata = (id) =>{
-        getItem(id).then(doc => {
-            console.log(doc.data())
-            setInfo(doc.data());
-          });
-    }
-
 
     // TODO: call this function when user click on add to cart
     const addItem = (item) => {
@@ -103,7 +90,7 @@ export default function ProductDescriptionPage() {
         <MainContainer>
             <ImageContainer>{info.Image}lk</ImageContainer>
             <TextContainer>
-                <ArtistNameText>hello</ArtistNameText>
+                <ArtistNameText>{info.Owner}</ArtistNameText>
                 <ArtTitleText>{info.Name}</ArtTitleText>
                 <PriceText>HKD${info.Price}</PriceText>
             
