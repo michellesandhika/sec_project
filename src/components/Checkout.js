@@ -28,7 +28,7 @@ function Checkout() {
 
             const response = await axios({ 
                 method: 'POST', 
-                url: `/payment?total=${getSubtotal(cart)}`,
+                url: `/payment?total=${getSubtotal(cart) * 100}`,
             });
             
             setSecret(response.data.secret);
@@ -96,7 +96,7 @@ function Checkout() {
                 </Elements>}
             </div>}
 
-            {menu < lastStep && <Button onClick={() => setMenu(menu + 1)} variant='contained'>Next</Button>}
+            {menu < lastStep && cart.length > 0 && <Button onClick={() => setMenu(menu + 1)} variant='contained'>Next</Button>}
         </main>
     );
 }
