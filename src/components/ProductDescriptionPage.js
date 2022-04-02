@@ -1,16 +1,12 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import styled from '@emotion/styled';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useStateContext } from '../services/StateContext';
+
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import styled from '@emotion/styled';
+
 import { getItem } from '../services/firestore';
-import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import { loadBundle } from 'firebase/firestore';
 import { createIPFSLink } from '../services/utilities';
+import { useStateContext } from '../services/StateContext';
 
 const MainContainer = styled.div`   
    padding-left: 10%;
@@ -19,7 +15,6 @@ const MainContainer = styled.div`
    padding-bottom: 0%;
    width: 100%;
    height: 100%;
-   /* background-color:var(--primary); */
    display: flex;
    overflow: hidden;
 `
@@ -29,7 +24,6 @@ const ImageContainer = styled.div`
    margin-top: 3%;
    margin-bottom: 2%;
    width: 20%;
-   /* background-color:green; */
 `
 
 const TextContainer = styled.div`
@@ -39,8 +33,6 @@ const TextContainer = styled.div`
     margin-top: 3%;
     margin-bottom: 2%;
     width: 60%;
-    /* background-color:yellow; */
-    
 `
 
 const ArtistNameText = styled.div`
@@ -62,7 +54,6 @@ const PriceText = styled.div`
 const ButtonContainer = styled.div`
     margin-top: 8%;
     margin-right: 5%;
-    /* float: right; */
     padding-bottom: 2%;
 `
 
@@ -70,53 +61,53 @@ const ArtDescription = styled.div`
     font-size: 30px;   
 `
 
-const PostedTimeText = styled.div`
-    font-size: 30px;   
-`
-
-/* const ArtistNameText = styled.text`
-    font-size: 30px;
-` */
-
-export default function ProductDescriptionPage() {
-
-    const {id} = useParams();
+function ProductDescriptionPage() {
+    const { id } = useParams();
     const [ {}, dispatch ] = useStateContext();
-
-    const [info , setInfo] = useState([]);
+    
+    const [ info , setInfo ] = useState([]);
+    const [ dialog, setDialog ] = useState(false);
+    
+    const ipfsImageLink = createIPFSLink(id, info.FileName);
 
     useEffect(() => {
         getItem(id).then(content => setInfo(content.data()));
-    }, [info]);
-
-    // TODO: call this function when user click on add to cart
-    const addItem = (item) => {
-        console.log('add:', item);   
-
+    }, [id]);
+    
+    const addItem = (item) => {  
         dispatch({
             type: 'ADD_CART',
+            id: id,
             item: item,
         });
-    };
 
-    const ipfsImageLink = createIPFSLink(id, info.FileName)
-    console.log(ipfsImageLink)
+        setDialog(true);
+    };
 
     return (
         <MainContainer>
-            <ImageContainer><img src={ipfsImageLink} width= "100%" height="auto"></img></ImageContainer>
+            <ImageContainer><img src={ipfsImageLink} alt={info.Title} width= '100%' height='auto'></img></ImageContainer>
             <TextContainer>
                 <ArtistNameText>{info.Owner}</ArtistNameText>
                 <ArtTitleText>{info.Title}</ArtTitleText>
                 <ArtDescription>{info.Description}</ArtDescription>
                 <PriceText>HKD${info.Price}</PriceText>
-            
                 <ButtonContainer>
-                    <Button variant="contained" size="large">Add to Cart!</Button>
+                    <Button onClick={() => addItem(info)} variant='contained' size='large'>Add to Cart</Button>
                 </ButtonContainer>
-            
             </TextContainer>
+
+            <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
+                <DialogTitle id='alert-dialog-title'>Success</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id='alert-dialog-description'>Item has been added to the cart.</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDialog(false)} variant='outlined'>Close</Button>
+                </DialogActions>
+            </Dialog>
         </MainContainer>
-        
     );
 }
+
+export default ProductDescriptionPage;

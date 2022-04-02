@@ -12,14 +12,9 @@ export const getItems = async () => {
     return items;
 };
 
-export function getItem(ID){
-    let items = [];
-
-    const docRef = doc(firestore, "Item", ID);
-
-    let getDocResult = getDoc(docRef);
-    return getDocResult
-
+export const getItem = async (id) => {
+    let item = await getDoc(doc(firestore, "Item", id));
+    return item;
 };
 
 export const getTransactions = async () => {

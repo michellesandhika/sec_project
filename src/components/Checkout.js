@@ -64,17 +64,17 @@ function Checkout() {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Owner</TableCell>
+                            <TableCell>Title</TableCell>
                             <TableCell>Price</TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {cart.map(item => (
-                            <TableRow key={item.id}>
-                                <TableCell>{item.id}</TableCell>
-                                <TableCell>{item.Name}</TableCell>
+                            <TableRow key={item.Id}>
+                                <TableCell>{item.Owner}</TableCell>
+                                <TableCell>{item.Title}</TableCell>
                                 <TableCell>${item.Price}</TableCell>
                                 <TableCell style={{ width: '50px' }}>
                                     <IconButton onClick={() => removeItem(item)}><DeleteOutlinedIcon /></IconButton>

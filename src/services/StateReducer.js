@@ -14,17 +14,11 @@ export const StateReducer = (state, action) => {
 
     switch (action.type) {
         case 'ADD_CART': 
-            const indexAdd = state.cart.findIndex(item => item.id === action.item.id);
-
-            if (indexAdd >= 0)
-                nCart[indexAdd].quantity += action.item.quantity;
-            else 
-                nCart.push({ ...action.item });
-            
+            nCart.push({ Id: action.id, ...action.item, });
             return { ...state, cart: nCart };
 
         case 'REMOVE_CART': 
-            const indexRemove = state.cart.findIndex(item => item.id === action.item.id);
+            const indexRemove = state.cart.findIndex(item => item.Id === action.item.Id);
 
             if (indexRemove >= 0)
                 nCart.splice(indexRemove, 1);

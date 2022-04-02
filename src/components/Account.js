@@ -75,6 +75,8 @@ function Account() {
             </div>
 
             <div className='account__content'>
+                
+                {/* arts tab */}
                 {menu === 0 && <Grid container spacing={2}>
                     {items.map(item => (
                         <Grid key={item.id} item xs={4}>
@@ -83,6 +85,7 @@ function Account() {
                     ))}
                 </Grid>}
 
+                {/* transactions tab */}
                 {menu === 1 && <Table className='account__transactions' stickyHeader>
                     <TableHead>
                         <TableRow>
@@ -104,11 +107,13 @@ function Account() {
                     </TableBody>
                 </Table>}
 
+                {/* settings tab */}
                 {menu === 2 && <div className='account__profile'>
                     <h3>Delete Account</h3>
                     <Button onClick={() => setDialog(true)} variant='contained' color='error'>Delete Account</Button>
                 </div>}
 
+                {/* delete account dialog */}
                 <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
                     <DialogTitle id='alert-dialog-title'>Delete Account Confirmation</DialogTitle>
                     <DialogContent>
