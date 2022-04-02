@@ -13,12 +13,12 @@ import { loadBundle } from 'firebase/firestore';
 import { createIPFSLink } from '../services/utilities';
 
 const MainContainer = styled.div`   
-   padding-left: 10%;
+   padding-left: 8%;
    padding-right: 2%;
    padding-top: 2%;
    padding-bottom: 0%;
-   width: 100%;
    height: 100%;
+   width: 90%;
    /* background-color:var(--primary); */
    display: flex;
    overflow: hidden;
@@ -106,7 +106,7 @@ export default function ProductDescriptionPage() {
         <MainContainer>
             <ImageContainer><img src={ipfsImageLink} width= "100%" height="auto"></img></ImageContainer>
             <TextContainer>
-                <ArtistNameText>{info.Owner}</ArtistNameText>
+                <ArtistNameText>Owner: {info.Owner}</ArtistNameText>
                 <ArtTitleText>{info.Title}</ArtTitleText>
                 <ArtDescription>{info.Description}</ArtDescription>
                 <PriceText>HKD${info.Price}</PriceText>
