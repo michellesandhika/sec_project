@@ -1,7 +1,7 @@
 {
   "name": "sec_project",
   "version": "0.1.0",
-  "homepage": "https://michellesandhika.github.io/sec_project",
+  "homepage": "https://security-ce24b.web.app/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.8.2",

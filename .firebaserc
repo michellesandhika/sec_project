@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "security-ce24b"
-  }
+    "default": "security-ce24b",
+    "sec_project": "security-ce24b"
+  },
+  "targets": {}
 }
