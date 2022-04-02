@@ -7,6 +7,7 @@ import { Button, Alert } from '@mui/material';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import '../styles/StripeForm.css';
+import { changingOwnership } from '../services/firestore';
 
 function StripeForm({ secret }) {
     const stripe = useStripe();
@@ -34,6 +35,8 @@ function StripeForm({ secret }) {
             },
             redirect: 'if_required',
         });
+
+        //TODO: modify the user permission here
 
         setMessage(error ? error.message : null);
         setLoading(false);

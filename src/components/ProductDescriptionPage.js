@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import styled from '@emotion/styled';
 
-import { getItem } from '../services/firestore';
+import { getItem, getCurrentUser, changingOwnership, getItemOwner } from '../services/firestore';
 import { createIPFSLink } from '../services/utilities';
 import { useStateContext } from '../services/StateContext';
 
@@ -82,6 +82,9 @@ function ProductDescriptionPage() {
         });
 
         setDialog(true);
+
+        let currentUser = getCurrentUser();
+        changingOwnership(info.Owner, currentUser, id);
     };
 
     return (

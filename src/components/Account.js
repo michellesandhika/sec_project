@@ -8,7 +8,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
-import { getItems, getTransactions } from '../services/firestore';
+import { getItems, getTransactions, addItemToUser } from '../services/firestore';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
