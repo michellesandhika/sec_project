@@ -5,3 +5,8 @@ export const validatePassword = (password) => {
 
     return lowercase.test(password) && uppercase.test(password) && numbers.test(password);
 };
+
+export const createIPFSLink = (ipfsLink, fileName) => {
+  const ipfsHttp = "https://ipfs.io/ipfs/"
+  return ipfsHttp + ipfsLink + "/" + fileName
+}
