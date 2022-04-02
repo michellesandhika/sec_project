@@ -18,10 +18,11 @@ function StripeForm({ secret }) {
     const [ loading, setLoading ] = useState(false);
 
     const handleSubmit = async (e) => {
-        if (!captcha) {
-            setMessage("Please verify that you're not a robot.");
-            return;
-        }
+        // TODO: uncommit before hosting
+        // if (!captcha) {
+        //     setMessage("Please verify that you're not a robot.");
+        //     return;
+        // }
 
         e.preventDefault();
         setLoading(true);
@@ -62,7 +63,7 @@ function StripeForm({ secret }) {
                 <ReCAPTCHA sitekey='6LdRy_0eAAAAAL08kTosI_LnAgBf8SDI_XSiWvQz' onChange={handleCaptcha} />
                 <div>
                     <Button type='button' onClick={handleCancel} variant='outlined' disabled={loading || !stripe || !elements}>Cancel</Button>
-                    <Button variant='contained' disabled={loading || !stripe || !elements}>Confirm Purchase</Button>
+                    <Button type='submit' variant='contained' disabled={loading || !stripe || !elements}>Confirm Purchase</Button>
                 </div>
             </div>
         </form>

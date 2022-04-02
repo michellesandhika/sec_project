@@ -43,7 +43,6 @@ function App() {
                     <Route exact path='/' element={<MarketPlacePage />} />
                     <Route exact path='/upload' element={user ? <Upload /> : <Authentication />} />
                     <Route exact path='/account' element={user ? <Account /> : <Authentication />} />
-                    <Route exact path='/checkout' element={user ? <Checkout /> : <Authentication />} />
                     <Route exact path='/checkout' element={<Checkout />} />
                     <Route path='/productdescription/:id' element={<ProductDescriptionPage/>} />
                 </Routes>
