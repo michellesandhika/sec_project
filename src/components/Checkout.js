@@ -15,7 +15,6 @@ const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
 
 function Checkout() {
     const lastStep = 1;
-
     const [ { cart }, dispatch ] = useStateContext();
     
     const [ menu, setMenu ] = useState(0);
