@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 
-import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell, Alert, Grid } from '@mui/material';
+import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -10,8 +9,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
 import { getItems, getTransactions } from '../services/firestore';
-import { validatePassword } from '../services/utilities';
-import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut, sendEmailVerification } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 
 import '../styles/Account.css';
 
@@ -21,83 +19,26 @@ function Account() {
 
     const auth = getAuth();
     const user = auth.currentUser;
-    const { register, handleSubmit, reset } = useForm();
-
-    const [ verifySuccess, setVerifySuccess ] = useState(false);
-    const [ verifyError, setVerifyError ] = useState('');
-
-    const [ passwordSuccess, setPasswordSuccess ] = useState(false);
-    const [ passwordError, setPasswordError ] = useState('');
 
     const [ menu, setMenu ] = useState(0);
     const [ items, setItems ] = useState([]);
     const [ transactions, setTransactions ] = useState([]);
+
+    const [ input, setInput ] = useState('');
+    const [ dialog, setDialog ] = useState(false);
 
     useEffect(() => {
         getItems().then(content => setItems(content));                  // TODO: change to this users items
         getTransactions().then(content => setTransactions(content));    // TODO: change to this users transactions
     }, []);
 
-    useEffect(() => {
-        setVerifySuccess(false);
-        setPasswordSuccess(false);
-        setPasswordError('');
-        reset();
-    }, [menu, reset]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setVerifySuccess(false);
-            setVerifyError('');
-        }, 5000);
-        
-        return () => clearTimeout(timer);
-    }, [verifySuccess, verifyError]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setPasswordSuccess(false);
-            setPasswordError('');
-        }, 5000);
-        
-        return () => clearTimeout(timer);
-    }, [passwordSuccess, passwordError]);
-    
-    const changePassword = async (data) => {
-        if (data.new !== data.confirm) {
-            setPasswordError('Your password does not match.');
+    const deleteAccount = () => {
+        if (input !== 'confirm') 
             return;
-        }
-
-        if (!validatePassword(data.new)) {
-            setPasswordError('Your password must be at least 8 characters and contains an uppercase letter, lowercase letter, and numbers.');
-            return;
-        }
-
-        const credentials = EmailAuthProvider.credential(user.email, data.current);
-
-        reauthenticateWithCredential(user, credentials)
-        .then(() => {
-            updatePassword(user, data.new)
-            .then(() => {
-                setPasswordSuccess(true);
-                setPasswordError('');
-                reset();
-            })
-            .catch((error) => {
-                const { code, message } = error;
-                console.log(code, message);
-    
-                setPasswordSuccess(false);
-                setPasswordError('Something went wrong. Please try again.');
-            });
-        })
-        .catch(() => {
-            setPasswordSuccess(false);
-            setPasswordError('Failed to change password. Your current password might be incorrect.');
-        });
+        
+        // TODO: delete account
     };
-
+    
     const logout = () => {
         signOut(auth)
         .then(() => {
@@ -109,28 +50,6 @@ function Account() {
         .catch((error) => {
             const { code, message } = error;
             console.log(code, message);
-        });
-    };
-
-    const sendVerification = () => {
-        sendEmailVerification(user)
-        .then(() => {
-            setVerifySuccess(true);
-        })
-        .catch((error) => {
-            const { code, message } = error;
-            
-            setVerifyError(true);
-            console.log(code, message);
-
-            switch (code) {
-                case 'auth/too-many-requests':
-                    setVerifyError('You\'ve requested for too many verification link. Please try again later.');
-                    break;
-                
-                default:
-                    setVerifyError('Something went wrong. Please try again.');
-            };
         });
     };
 
@@ -186,29 +105,21 @@ function Account() {
                 </Table>}
 
                 {menu === 2 && <div className='account__profile'>
-                    <h3>Account Verification</h3>
-                    <div>
-                        {user.emailVerified && <Alert severity='success'>Verification Status: Verified</Alert>}                        
-                        {!user.emailVerified && <Alert severity='warning'>Verification Status: Not Verified</Alert>}                        
-                        
-                        {verifySuccess && <Alert severity='success'>A new verification link has been sent to your email account.</Alert>}                        
-                        {verifyError !== '' && <Alert severity='error'>{verifyError}</Alert>}                        
-
-                        {!user.emailVerified && <Button type='submit' variant='contained' onClick={sendVerification}>Verify Account</Button>}
-                    </div>
-
-                    <h3>Change Password</h3>
-                    <form onSubmit={handleSubmit(changePassword)}>
-                        <TextField label='Current Password' type='password' required {...register('current')} />
-                        <TextField label='New Password' type='password' required {...register('new')} />
-                        <TextField label='Confirm New Password' type='password' required {...register('confirm')} />
-
-                        {passwordSuccess && <Alert severity='success'>Changed Password Successfully!</Alert>}
-                        {passwordError !== '' && <Alert severity='error'>{passwordError}</Alert>}
-
-                        <Button type='submit' variant='contained'>Confirm</Button>
-                    </form>
+                    <h3>Delete Account</h3>
+                    <Button onClick={() => setDialog(true)} variant='contained' color='error'>Delete Account</Button>
                 </div>}
+
+                <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
+                    <DialogTitle id='alert-dialog-title'>Delete Account Confirmation</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id='alert-dialog-description'>This action cannot be undone. Enter confirm to confirm you want to delete this account.</DialogContentText>
+                        <TextField label='Confirmation' type='text' onChange={(e) => setInput(e.target.value)} style={{ marginTop: '25px' }} fullWidth autoFocus />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setDialog(false)} variant='outlined'>Cancel</Button>
+                        <Button onClick={() => deleteAccount()} variant='contained' color='error'>Delete Account</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         </main>
     );

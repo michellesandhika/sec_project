@@ -10,7 +10,7 @@ import ProductDescriptionPage from './components/ProductDescriptionPage'
 import MarketPlacePage from './components/MarketPlacePage';
 
 import { useStateContext } from './services/StateContext';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import './App.css';
 
@@ -38,11 +38,12 @@ function App() {
     return (
         <div className='app'>
             <BrowserRouter>
-                <Header />
+                <Header user={user} />
                 <Routes>
                     <Route exact path='/' element={<MarketPlacePage />} />
                     <Route exact path='/upload' element={user ? <Upload /> : <Authentication />} />
                     <Route exact path='/account' element={user ? <Account /> : <Authentication />} />
+                    <Route exact path='/checkout' element={user ? <Checkout /> : <Authentication />} />
                     <Route exact path='/checkout' element={<Checkout />} />
                     <Route path='/productdescription/:id' element={<ProductDescriptionPage/>} />
                 </Routes>

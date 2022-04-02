@@ -36,35 +36,12 @@
     border-left: 1px solid var(--black);
 }
 
-.account__profile > h2 {
-    margin-bottom: 40px;
-}
-
-.account__profile > div {
+.account__profile {
     margin-bottom: 50px;
     width: 450px;
 }
 
-.account__profile > div > div {
-    margin-top: 15px;
-}
-
-.account__profile > div > button {
-    width: 50%;
-    margin-top: 20px;
-}
-
-.account__profile > form {
-    display: flex;
-    flex-direction: column;
-    width: 450px;
-}
-
-.account__profile > form > div {
-    margin: 10px 0 10px;
-}
-
-.account__profile > form > button {
+.account__profile > button {
     width: 50%;
     margin-top: 10px;
 }

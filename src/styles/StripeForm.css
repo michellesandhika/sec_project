@@ -1,9 +1,16 @@
-.stripeform__form > button {
-    margin: 15px 0 0 20px;
-    float: right;
-}
-
 .stripeform__form > h6 {
     margin-top: 15px;
     color: var(--red)
+}
+
+.stripeform__button {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.stripeform__button > div > button {
+    margin: 15px 0 0 20px;
 }
