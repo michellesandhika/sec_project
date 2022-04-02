@@ -10,6 +10,8 @@ import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
 import { getItems, getTransactions } from '../services/firestore';
 import { getAuth, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
 
 import '../styles/Account.css';
 
@@ -19,6 +21,7 @@ function Account() {
 
     const auth = getAuth();
     const user = auth.currentUser;
+    const navigate = useNavigate();
 
     const [ menu, setMenu ] = useState(0);
     const [ items, setItems ] = useState([]);
@@ -53,6 +56,11 @@ function Account() {
         });
     };
 
+    const navigatetoID = (id) => {
+        const pathName = '/productdescription/' + id
+        navigate(pathName);   
+    };
+
     return ( 
         <main className='account__container'>
             <div className='account__sidebar'>
@@ -79,8 +87,8 @@ function Account() {
                 {/* arts tab */}
                 {menu === 0 && <Grid container spacing={2}>
                     {items.map(item => (
-                        <Grid key={item.id} item xs={4}>
-                            <MarketPlaceCard title={'hello'} description={'a lot of other things here'} picture={''}></MarketPlaceCard>
+                        <Grid key={item.id} item xs={4} onClick={() => navigatetoID(item.id)}>
+                            <MarketPlaceCard title={item.Title} description={item.Description} fileName={item.FileName} ipfsLink={item.id} price={item.Price}></MarketPlaceCard>
                         </Grid>
                     ))}
                 </Grid>}

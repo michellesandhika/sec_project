@@ -9,21 +9,21 @@ import { createIPFSLink } from '../services/utilities';
 import { useStateContext } from '../services/StateContext';
 
 const MainContainer = styled.div`   
-   padding-left: 10%;
-   padding-right: 2%;
-   padding-top: 2%;
-   padding-bottom: 0%;
-   width: 100%;
-   height: 100%;
-   display: flex;
-   overflow: hidden;
+    padding-left: 8%;
+    padding-right: 2%;
+    padding-top: 2%;
+    padding-bottom: 0%;
+    height: 100%;
+    width: 90%;
+    display: flex;
+    overflow: hidden;
 `
 
 const ImageContainer = styled.div`   
-   margin-left: 2%;
-   margin-top: 3%;
-   margin-bottom: 2%;
-   width: 20%;
+    margin-left: 2%;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    width: 20%;
 `
 
 const TextContainer = styled.div`
@@ -88,7 +88,7 @@ function ProductDescriptionPage() {
         <MainContainer>
             <ImageContainer><img src={ipfsImageLink} alt={info.Title} width= '100%' height='auto'></img></ImageContainer>
             <TextContainer>
-                <ArtistNameText>{info.Owner}</ArtistNameText>
+                <ArtistNameText>Owner: {info.Owner}</ArtistNameText>
                 <ArtTitleText>{info.Title}</ArtTitleText>
                 <ArtDescription>{info.Description}</ArtDescription>
                 <PriceText>HKD${info.Price}</PriceText>
