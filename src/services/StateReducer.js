@@ -5,7 +5,7 @@ export const initialState = {
 
 export const getSubtotal = (cart) => {
     let subtotal = 0;
-    cart.forEach(item => { subtotal += item.price * item.quantity });
+    cart.forEach(item => { subtotal += item.Price });
     return subtotal;
 };
 
