@@ -10,22 +10,26 @@ import { getItem } from '../services/firestore';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { loadBundle } from 'firebase/firestore';
+import { createIPFSLink } from '../services/utilities';
 
 const MainContainer = styled.div`   
-   margin-left: 2%;
-   margin-right: 2%;
-   margin-top: 3%;
-   width: 96%;
-   background-color:var(--primary);
-   display: flex
+   padding-left: 10%;
+   padding-right: 2%;
+   padding-top: 2%;
+   padding-bottom: 0%;
+   width: 100%;
+   height: 100%;
+   /* background-color:var(--primary); */
+   display: flex;
+   overflow: hidden;
 `
 
 const ImageContainer = styled.div`   
    margin-left: 2%;
    margin-top: 3%;
    margin-bottom: 2%;
-   width: 30%;
-   background-color:yellow;
+   width: 20%;
+   /* background-color:green; */
 `
 
 const TextContainer = styled.div`
@@ -35,18 +39,19 @@ const TextContainer = styled.div`
     margin-top: 3%;
     margin-bottom: 2%;
     width: 60%;
-    background-color:yellow;
+    /* background-color:yellow; */
     
 `
 
 const ArtistNameText = styled.div`
     padding-top: 8%;
-    font-size: 30px;
+    font-size: 20px;
 `
 
 const ArtTitleText = styled.div`
     padding-top: 10px; 
     font-size: 50px;
+    font-weight: bold;
 `
 
 const PriceText = styled.div`
@@ -57,8 +62,16 @@ const PriceText = styled.div`
 const ButtonContainer = styled.div`
     margin-top: 8%;
     margin-right: 5%;
-    float: right;
+    /* float: right; */
     padding-bottom: 2%;
+`
+
+const ArtDescription = styled.div`
+    font-size: 30px;   
+`
+
+const PostedTimeText = styled.div`
+    font-size: 30px;   
 `
 
 /* const ArtistNameText = styled.text`
@@ -86,16 +99,20 @@ export default function ProductDescriptionPage() {
         });
     };
 
+    const ipfsImageLink = createIPFSLink(id, info.FileName)
+    console.log(ipfsImageLink)
+
     return (
         <MainContainer>
-            <ImageContainer>{info.Image}lk</ImageContainer>
+            <ImageContainer><img src={ipfsImageLink} width= "100%" height="auto"></img></ImageContainer>
             <TextContainer>
                 <ArtistNameText>{info.Owner}</ArtistNameText>
-                <ArtTitleText>{info.Name}</ArtTitleText>
+                <ArtTitleText>{info.Title}</ArtTitleText>
+                <ArtDescription>{info.Description}</ArtDescription>
                 <PriceText>HKD${info.Price}</PriceText>
             
                 <ButtonContainer>
-                    <Button variant="contained" size="large">BuyNow!</Button>
+                    <Button variant="contained" size="large">Add to Cart!</Button>
                 </ButtonContainer>
             
             </TextContainer>

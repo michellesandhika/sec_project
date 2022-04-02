@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import styled from '@emotion/styled';
+import { createIPFSLink } from '../services/utilities';
 
 import ProductDescriptionPage from './ProductDescriptionPage';
 
@@ -18,6 +19,7 @@ const PriceArea = styled.div`
 
 const CardArea = styled.div`
     width: 80%;
+    height: 100px;
     float:left;
     padding-bottom: 10px;
     /* background-color: yellow; */
@@ -28,13 +30,16 @@ const PriceText = styled.text`
 `
 
 export default function MarketPlaceCard(props) {
+
+    const ipfsImageLink = createIPFSLink(props.ipfsLink, props.fileName)
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardActionArea>
                 <CardMedia
                 component='img'
                 height='140'
-                image='/static/images/cards/contemplative-reptile.jpg'
+                image = {ipfsImageLink}
                 alt='green iguana'
                 />
 

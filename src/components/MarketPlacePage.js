@@ -32,7 +32,7 @@ const MarketPlacePage = () => {
             <Grid container spacing={2}>
                 {info.map((data) => (
                     <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
-                        <MarketPlaceCard title={data.Name} description={data.Description} picture={''} price={data.Price}></MarketPlaceCard>
+                        <MarketPlaceCard title={data.Title} description={data.Description} fileName={data.FileName} ipfsLink={data.id} price={data.Price}></MarketPlaceCard>
                     </Grid>
                 ))}
             </Grid>
