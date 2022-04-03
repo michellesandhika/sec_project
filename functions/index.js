@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
 
 require('dotenv').config();
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(cors({
     // origin: 'http://localhost:3000',
+    // origin: 'http://127.0.0.1:3000',
     origin: 'https://security-ce24b.web.app',
     methods: ['GET', 'POST'],
     responseHeader: 'Content-Type',
@@ -19,11 +21,7 @@ app.use(cors({
 app.use(express.json());
 
 
-// routes
-app.get('/', (request, response) => {
-    response.status(200).send('Successfully connected!');
-});
-
+// stripe routes
 app.post('/setup', async (request, response) => {
     const setupIntent = await stripe.setupIntents.create({
         payment_method_types: ['card'],
@@ -45,10 +43,18 @@ app.post('/payment', async (request, response) => {
 app.post('/cancel', async (request, response) => {
     const secret = request.query.secret;
     const paymentIntent = await stripe.paymentIntents.cancel(secret);
-
     response.status(201).send({ status: paymentIntent.status });
 });
 
 
-// listener
+// captcha routes
+app.post('/verify', async (request, response) => {
+    const token = request.query.token;
+    const result = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${token}`);
+    response.status(200).send(result.data);
+});
+
+
+// exports
 exports.stripe = functions.https.onRequest(app);
+exports.captcha = functions.https.onRequest(app);

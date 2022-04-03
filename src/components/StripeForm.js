@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-import axios from '../services/axios';
 import { Button, Alert } from '@mui/material';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-import { verifyCaptcha } from '../services/utilities'
+import axios from '../services/axios';
+import { verifyCaptcha } from '../services/utilities';
 import { changingOwnership } from '../services/firestore';
 import '../styles/StripeForm.css';
 
@@ -47,7 +47,7 @@ function StripeForm({ secret }) {
     const handleCancel = async () => {
         const response = await axios({ 
             method: 'POST', 
-            url: `/cancel?secret=${secret.split('_secret')[0]}`,
+            url: `/stripe/cancel?secret=${secret.split('_secret')[0]}`,
         });
 
         console.log('payment status: ', response.data.status);
@@ -55,11 +55,10 @@ function StripeForm({ secret }) {
     };
 
     const handleCaptcha = async (value) => {
-        const success = await verifyCaptcha(value);
-
-        if (success)
+        const response = await verifyCaptcha(value);
+        if (response.success)
             setCaptcha(value);
-      };
+    };
 
     return (
         <form className='stripeform__form' onSubmit={handleSubmit}>

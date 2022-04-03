@@ -27,7 +27,7 @@ function Checkout() {
 
             const response = await axios({ 
                 method: 'POST', 
-                url: `/payment?total=${getSubtotal(cart) * 100}`,
+                url: `/stripe/payment?total=${getSubtotal(cart) * 100}`,
             });
             
             setSecret(response.data.secret);
