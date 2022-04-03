@@ -6,8 +6,9 @@ import axios from '../services/axios';
 import { Button, Alert } from '@mui/material';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-import '../styles/StripeForm.css';
+import { verifyCaptcha } from '../services/utilities'
 import { changingOwnership } from '../services/firestore';
+import '../styles/StripeForm.css';
 
 function StripeForm({ secret }) {
     const stripe = useStripe();
@@ -53,8 +54,11 @@ function StripeForm({ secret }) {
         navigate('/');
     };
 
-    const handleCaptcha = (value) => {
-        setCaptcha(value);
+    const handleCaptcha = async (value) => {
+        const success = await verifyCaptcha(value);
+
+        if (success)
+            setCaptcha(value);
       };
 
     return (
