@@ -61,7 +61,11 @@ export const getTransactionsFromUser = async (user) => {
     return transactions;
 };
 
-export const uploadItem = async () => {
+export const createTransactionRecord = async (record) => {
+    await setDoc(doc(collection(firestore, 'Transaction')), record);
+};
+
+export const checkDuplicates = async () => {
 
 };
 

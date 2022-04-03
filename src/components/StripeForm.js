@@ -7,7 +7,7 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 
 import axios from '../services/axios';
 import { verifyCaptcha } from '../services/utilities';
-import { changingOwnership } from '../services/firestore';
+import { createTransactionRecord, changingOwnership } from '../services/firestore';
 import { useStateContext } from '../services/StateContext';
 import '../styles/StripeForm.css';
 
@@ -42,6 +42,14 @@ function StripeForm({ secret }) {
 
         if (!error) {
             for (const item of cart) {
+                const record = {
+                    Buyer: user.email,
+                    Seller: item.Owner,
+                    Paid: item.Price,
+                    Time: new Date(),
+                }
+
+                createTransactionRecord(record);
                 changingOwnership(item.Owner, user.email, item.Id);
             }
 
