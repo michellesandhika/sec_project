@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Google Login Bare Bones
+#Already confugured to use common firebase
+- () Needs Merging
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
