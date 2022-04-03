@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, signOut, deleteUser } from 'firebase/auth';
 
 import { TextField, Button, Table, TableHead, TableBody, TableRow, TableCell, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
@@ -9,10 +11,6 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
 import { getItemsFromUser, getTransactionsFromUser } from '../services/firestore';
-import { getAuth, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-
-
 import '../styles/Account.css';
 
 function Account() {
@@ -41,7 +39,14 @@ function Account() {
         if (input !== 'confirm') 
             return;
         
-        // TODO: delete account (will do after integrate Raksit's part)
+        deleteUser(user).then(() => {
+            console.log('user deleted');
+
+            // TODO: delete user's table? what abt art pieces owned by the user?
+            
+        }).catch((error) => {
+            console.log(error.code, error.message);
+        });
     };
     
     const logout = () => {
