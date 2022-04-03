@@ -23,7 +23,7 @@ function Account() {
     const [ menu, setMenu ] = useState(0);
     const [ items, setItems ] = useState([]);
     const [ transactions, setTransactions ] = useState([]);
-
+    
     const [ input, setInput ] = useState('');
     const [ dialog, setDialog ] = useState(false);
 

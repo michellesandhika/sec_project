@@ -52,7 +52,6 @@ function Upload() {
             Title: data.title,
             Description: data.description || '',
             FileName: filename?.split('\\')[2],
-            ForSale: true,
             Owner: user.email,
             PostedTime: new Date(),
             Price: parseInt(data.price),

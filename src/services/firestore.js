@@ -6,12 +6,17 @@ export const getItem = async (id) => {
     return item;
 };
 
-export const getItems = async () => {
+export const getItems = async (user) => {
     let items = [];
-    const response = await getDocs(collection(firestore, 'Item'));
-    
+    let response;
+
+    if (user) 
+        response = await getDocs(query(collection(firestore, 'Item'), where('Owner', '!=', user)));
+    else 
+        response = await getDocs(collection(firestore, 'Item'));
+
     response.forEach((item) => {
-        items.push({ id: item.id, ...item.data() });
+        items.push({ Id: item.id, ...item.data() });
     });
 
     return items;
@@ -89,14 +94,8 @@ export const updateOwner = async (ipfsLink, user) => {
     await updateDoc(itemDetail, { 'Owner': user });
 };
 
-export const updateSaleStatus = async (ipfsLink, saleBoolean) => {
-    let itemDetail = doc(firestore, 'Item', ipfsLink);
-    await updateDoc(itemDetail, { 'ForSale': saleBoolean });
-};
-
 export const changingOwnership = async (oldUser, newUser, ipfsLink) => {
     await removeItemFromUser(ipfsLink, oldUser);
     await addItemToUser(ipfsLink, newUser);
     await updateOwner(ipfsLink, newUser);
-    await updateSaleStatus(ipfsLink, false);
 };

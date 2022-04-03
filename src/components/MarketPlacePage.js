@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Grid from '@mui/material/Grid';
 import styled from '@emotion/styled';
 import MarketPlaceCard from './MarketPlaceCard';
-import { useNavigate } from 'react-router-dom';
-import { getItems, getTransactions } from '../services/firestore';
-import { useState, useEffect } from 'react';
-import ProductDescriptionPage from './ProductDescriptionPage';
 
+import { getItems } from '../services/firestore';
+import { useStateContext } from '../services/StateContext';
 
 const MainContainer = styled.div`   
    margin-left: 20px;
@@ -14,25 +14,27 @@ const MainContainer = styled.div`
    margin-right:20px;
    width: 90%;
 `
-const MarketPlacePage = () => {
+
+function MarketPlacePage() {
     const navigate = useNavigate();
-    const [ info , setInfo ] = useState([]);
+    const [ { user }, dispatch ] = useStateContext();
+    const [ items , setItems ] = useState([]);
 
     useEffect(() => {
-        getItems().then(content => setInfo(content));
-    }, []);
+        getItems(user ? user.email : null).then(content => setItems(content));
+    }, [user]);
 
     const navigatetoID = (id) => {
-        const pathName = '/productdescription/' + id
+        const pathName = '/product/' + id
         navigate(pathName);   
     };
 
     return (
         <MainContainer>
             <Grid container spacing={2}>
-                {info.map((data) => (
-                    <Grid item xs={3} key={data.id} onClick={() => navigatetoID(data.id)}>
-                        <MarketPlaceCard title={data.Title} description={data.Description} fileName={data.FileName} ipfsLink={data.id} price={data.Price}></MarketPlaceCard>
+                {items.map((data) => (
+                    <Grid item xs={3} key={data.Id} onClick={() => navigatetoID(data.Id)}>
+                        <MarketPlaceCard title={data.Title} description={data.Description} fileName={data.FileName} ipfsLink={data.Id} price={data.Price} />
                     </Grid>
                 ))}
             </Grid>
@@ -40,5 +42,4 @@ const MarketPlacePage = () => {
     );
 }
   
-
 export default MarketPlacePage;
