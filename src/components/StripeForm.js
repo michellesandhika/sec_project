@@ -34,8 +34,8 @@ function StripeForm({ secret }) {
         const { error } = await stripe.confirmPayment({ 
             elements,
             confirmParams: {
-                return_url: 'http://120.0.0.1:3000',
-                // return_url: 'https://security-ce24b.web.app',
+                // return_url: 'http://120.0.0.1:3000',
+                return_url: 'https://security-ce24b.web.app',
             },
             redirect: 'if_required',
         });

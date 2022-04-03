@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -58,7 +58,6 @@ function Upload() {
             Price: parseInt(data.price),
         }
 
-        console.log(cid, item);
         await createItem(cid, item);
         await addItemToUser(cid, user.email);
 

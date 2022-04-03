@@ -710,3 +710,80 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [info] i  functions: Finished "services" in ~1s {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-services"},"extension":{},"message":"Finished \"services\" in ~1s"}}
 [debug] [2022-04-03T15:44:52.970Z] [worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: IDLE"}}
 [debug] [2022-04-03T15:44:52.970Z] [work-queue] {"queueLength":0,"workRunningCount":0}
+[debug] [2022-04-03T15:46:41.339Z] File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers"}}
+[debug] [2022-04-03T15:46:41.409Z] File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers"}}
+[debug] [2022-04-03T15:46:42.412Z] [worker-pool] Shutting down IDLE worker (us-central1-services) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-services)"}}
+[debug] [2022-04-03T15:46:42.413Z] [worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: FINISHING {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: FINISHING"}}
+[debug] [2022-04-03T15:46:42.426Z] Validating nodejs source
+[debug] [2022-04-03T15:46:44.160Z] > [functions] package.json contents: {
+  "name": "stripe-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.19.0",
+    "stripe": "^8.214.0"
+  }
+}
+[debug] [2022-04-03T15:46:44.161Z] Building nodejs source
+[debug] [2022-04-03T15:46:44.161Z] Analyzing nodejs backend spec
+[debug] [2022-04-03T15:46:44.172Z] [worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: exited"}}
+[debug] [2022-04-03T15:46:44.173Z] [worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-us-central1-services-5f13f0ea-abfc-49fd-ac9e-bf4b0c44b436]: FINISHED"}}
+[debug] [2022-04-03T15:47:16.834Z] File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers"}}
+[debug] [2022-04-03T15:47:17.835Z] Validating nodejs source
+[debug] [2022-04-03T15:47:19.838Z] > [functions] package.json contents: {
+  "name": "stripe-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.19.0",
+    "stripe": "^8.214.0"
+  }
+}
+[debug] [2022-04-03T15:47:19.839Z] Building nodejs source
+[debug] [2022-04-03T15:47:19.839Z] Analyzing nodejs backend spec
+[debug] [2022-04-03T15:48:05.640Z] File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/batt/PolyU/sec_project/functions/index.js changed, reloading triggers"}}
+[debug] [2022-04-03T15:48:06.641Z] Validating nodejs source
+[debug] [2022-04-03T15:48:08.300Z] > [functions] package.json contents: {
+  "name": "stripe-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.19.0",
+    "stripe": "^8.214.0"
+  }
+}
+[debug] [2022-04-03T15:48:08.300Z] Building nodejs source
+[debug] [2022-04-03T15:48:08.300Z] Analyzing nodejs backend spec
