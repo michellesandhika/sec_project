@@ -34,7 +34,7 @@ function Upload() {
     const cid = storeFiles(data.filename);
     console.log(cid);
 
-    // TODO: upload firesbase firestore (remove comment after done)
+    // TODO: upload information to firestore (remove comment after done)
     // if there is duplicate
     //     -> setError(false);
     //     -> setMessage('This image has already been uploaded, please upload a new image.');

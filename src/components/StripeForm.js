@@ -19,11 +19,10 @@ function StripeForm({ secret }) {
     const [ loading, setLoading ] = useState(false);
 
     const handleSubmit = async (e) => {
-        // TODO: uncommit before hosting
-        // if (!captcha) {
-        //     setMessage("Please verify that you're not a robot.");
-        //     return;
-        // }
+        if (!captcha) {
+            setMessage("Please verify that you're not a robot.");
+            return;
+        }
 
         e.preventDefault();
         setLoading(true);
@@ -31,7 +30,8 @@ function StripeForm({ secret }) {
         const { error } = await stripe.confirmPayment({ 
             elements,
             confirmParams: {
-                return_url: 'http://localhost:3000',    // TODO: change to domain after hosted
+                // return_url: 'http://localhost:3000',
+                return_url: 'https://security-ce24b.web.app',
             },
             redirect: 'if_required',
         });

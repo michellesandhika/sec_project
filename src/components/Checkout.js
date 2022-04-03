@@ -67,7 +67,7 @@ function Checkout() {
                             <TableCell>Owner</TableCell>
                             <TableCell>Title</TableCell>
                             <TableCell>Price</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell style={{ width: '50px' }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -76,7 +76,7 @@ function Checkout() {
                                 <TableCell>{item.Owner}</TableCell>
                                 <TableCell>{item.Title}</TableCell>
                                 <TableCell>${item.Price}</TableCell>
-                                <TableCell style={{ width: '50px' }}>
+                                <TableCell>
                                     <IconButton onClick={() => removeItem(item)}><DeleteOutlinedIcon /></IconButton>
                                 </TableCell>
                             </TableRow>
@@ -84,7 +84,7 @@ function Checkout() {
                     </TableBody>
                 </Table>
                 <div>
-                    <h4>Total: <span>${getSubtotal(cart)}</span></h4>
+                    <h3>Total: <span>${getSubtotal(cart)}</span></h3>
                 </div>
             </div>}
 

@@ -8,7 +8,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import MarketPlaceCard from './MarketPlaceCard';
 import { useStateContext } from '../services/StateContext';
-import { getItems, getTransactions, addItemToUser } from '../services/firestore';
+import { getItemsFromUser, getTransactionsFromUser } from '../services/firestore';
 import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,10 +17,9 @@ import '../styles/Account.css';
 
 function Account() {
     const dateFormat = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
-    const [ {}, dispatch ] = useStateContext();
+    const [ { user }, dispatch ] = useStateContext();
 
     const auth = getAuth();
-    const user = auth.currentUser;
     const navigate = useNavigate();
 
     const [ menu, setMenu ] = useState(0);
@@ -31,15 +30,18 @@ function Account() {
     const [ dialog, setDialog ] = useState(false);
 
     useEffect(() => {
-        getItems().then(content => setItems(content));                  // TODO: change to this users items
-        getTransactions().then(content => setTransactions(content));    // TODO: change to this users transactions
+        getItemsFromUser(user).then(content => setItems(content));
+        getTransactionsFromUser(user).then(content => setTransactions(content));
     }, []);
+
+    console.log(items);
+    console.log(transactions);
 
     const deleteAccount = () => {
         if (input !== 'confirm') 
             return;
         
-        // TODO: delete account
+        // TODO: delete account (will do after integrate Raksit's part)
     };
     
     const logout = () => {
@@ -87,8 +89,8 @@ function Account() {
                 {/* arts tab */}
                 {menu === 0 && <Grid container spacing={2}>
                     {items.map(item => (
-                        <Grid key={item.id} item xs={4} onClick={() => navigatetoID(item.id)}>
-                            <MarketPlaceCard title={item.Title} description={item.Description} fileName={item.FileName} ipfsLink={item.id} price={item.Price}></MarketPlaceCard>
+                        <Grid key={item.Id} item xs={4} onClick={() => navigatetoID(item.Id)}>
+                            <MarketPlaceCard title={item.Title} description={item.Description} fileName={item.FileName} ipfsLink={item.Id} price={item.Price} />
                         </Grid>
                     ))}
                 </Grid>}
@@ -97,18 +99,22 @@ function Account() {
                 {menu === 1 && <Table className='account__transactions' stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Date</TableCell>
+                            <TableCell style={{ width: '220px' }}>ID</TableCell>
+                            <TableCell style={{ width: '200px' }}>Date</TableCell>
+                            <TableCell>Type</TableCell>
+                            <TableCell>From</TableCell>
                             <TableCell>To</TableCell>
                             <TableCell>Total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {transactions.map(item => (
-                            <TableRow key={item.id}>
-                                <TableCell>{item.id}</TableCell>
+                            <TableRow key={item.Id}>
+                                <TableCell>{item.Id}</TableCell>
                                 <TableCell>{item.Time.toDate().toLocaleDateString('en-US', dateFormat)}</TableCell>
-                                <TableCell>{item.Seller}</TableCell>
+                                <TableCell>{item.Type}</TableCell>
+                                <TableCell>{item.Type === 'Bought' ? item.Seller : '-'}</TableCell>
+                                <TableCell>{item.Type === 'Sold' ? item.Buyer : '-'}</TableCell>
                                 <TableCell>${item.Paid}</TableCell>
                             </TableRow>
                         ))}
