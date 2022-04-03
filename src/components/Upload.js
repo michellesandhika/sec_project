@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { TextField, Button, Alert } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
+import { checkDuplicates, createItem, addItemToUser } from '../services/firestore'
 import { verifyCaptcha } from '../services/utilities';
 import { makeStorageClient } from '../services/ipfs';
+import { useStateContext } from '../services/StateContext';
 import '../styles/Upload.css';
 
 function Upload() {
     const navigate = useNavigate();
     const { register, handleSubmit, setValue } = useForm();
-    const [ filename, setFilename ] = useState();
+    const [ { user }, dispatch ] = useStateContext();
 
+    const [ filename, setFilename ] = useState();
+    const [ loading, setLoading ] = useState(false);
     const [ error, setError ] = useState(false);
     const [ message, setMessage ] = useState('');
 
@@ -25,21 +30,39 @@ function Upload() {
         return cid;
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         if (!data.captcha) {
             setError(true);
             setMessage('Please verify that you\'re not a robot.');
             return;
         }
 
-        const cid = storeFiles(data.filename);
-        console.log(cid);
+        setLoading(true);
+        const cid = await storeFiles(data.filename);
+        const duplicates = await checkDuplicates(cid);
+        
+        if (duplicates) {
+            setError(true);
+            setMessage('This image has already been uploaded once, please upload a new image.');
+            setLoading(false);
+            return;
+        }
+        
+        const item = {
+            Title: data.title,
+            Description: data.description || '',
+            FileName: filename?.split('\\')[2],
+            ForSale: true,
+            Owner: user.email,
+            PostedTime: new Date(),
+            Price: parseInt(data.price),
+        }
 
-        // TODO: upload information to firestore (remove comment after done)
-        // if there is duplicate
-        //     -> setError(false);
-        //     -> setMessage('This image has already been uploaded, please upload a new image.');
+        console.log(cid, item);
+        await createItem(cid, item);
+        await addItemToUser(cid, user.email);
 
+        setLoading(false);
         navigate('/account');
     };
 
@@ -59,7 +82,7 @@ function Upload() {
                 <div className='upload__info'>
                     <TextField label='Title' fullWidth required {...register('title')} />
                     <TextField label='Description' multiline fullWidth {...register('description')} />
-                    <TextField label='Price' type='number' fullWidth required {...register('price')} />
+                    <TextField label='Price' type='number' inputProps={{ min: '100', step: '10' }} fullWidth required {...register('price')} />
                 </div>
 
                 <div className='upload__file'>
@@ -71,7 +94,7 @@ function Upload() {
                 </div>
 
                 <ReCAPTCHA sitekey='6LdRy_0eAAAAAL08kTosI_LnAgBf8SDI_XSiWvQz' onChange={handleCaptcha} />
-                <Button type='submit' variant='contained' startIcon={<FileUploadOutlinedIcon />}>Upload</Button>
+                <LoadingButton type='submit' loading={loading} variant='contained' startIcon={<FileUploadOutlinedIcon />}>Upload</LoadingButton>
             </form>
         </main>
     );

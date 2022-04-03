@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc, addDoc, setDoc, deleteDoc, updateDoc, query, where } from 'firebase/firestore';
 import { firestore } from './config';
 
 export const getItem = async (id) => {
@@ -62,20 +62,25 @@ export const getTransactionsFromUser = async (user) => {
 };
 
 export const createTransactionRecord = async (record) => {
-    await setDoc(doc(collection(firestore, 'Transaction')), record);
+    await addDoc(collection(firestore, 'Transaction'), record);
 };
 
-export const checkDuplicates = async () => {
+export const createItem = async (id, content) => {
+    await setDoc(doc(firestore, 'Item', id), content);
+};
 
+export const checkDuplicates = async (id) => {
+    let item = await getItem(id);
+    return item.exists();
 };
 
 export const addItemToUser = async (ipfsLink, user) =>{
-    let imagesCollection = collection(firestore, 'Users', user, 'images')
+    let imagesCollection = collection(firestore, 'Users', user, 'images');
     await setDoc(doc(imagesCollection, ipfsLink), {});
 };
 
 export const removeItemFromUser = async (ipfsLink, owner) => {
-    let imagesCollection = collection(firestore, 'Users', owner, 'images')
+    let imagesCollection = collection(firestore, 'Users', owner, 'images');
     await deleteDoc(doc(imagesCollection, ipfsLink));
 };
 
@@ -89,9 +94,9 @@ export const updateSaleStatus = async (ipfsLink, saleBoolean) => {
     await updateDoc(itemDetail, { 'ForSale': saleBoolean });
 };
 
-export const changingOwnership = (oldUser, newUser, ipfsLink) => {
-    removeItemFromUser(ipfsLink, oldUser);
-    addItemToUser(ipfsLink, newUser);
-    updateOwner(ipfsLink, newUser);
-    updateSaleStatus(ipfsLink, false);
+export const changingOwnership = async (oldUser, newUser, ipfsLink) => {
+    await removeItemFromUser(ipfsLink, oldUser);
+    await addItemToUser(ipfsLink, newUser);
+    await updateOwner(ipfsLink, newUser);
+    await updateSaleStatus(ipfsLink, false);
 };
