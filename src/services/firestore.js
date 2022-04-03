@@ -20,7 +20,7 @@ export const getItems = async () => {
 export const getItemsFromUser = async (user) => {
     let ids = [];
     let items = [];
-    const response = await getDocs(collection(firestore, 'Users', user.email, 'images'));
+    const response = await getDocs(collection(firestore, 'Users', user, 'images'));
     
     response.forEach((item) => {
         ids.push(item.id);
@@ -47,8 +47,8 @@ export const getTransactions = async () => {
 
 export const getTransactionsFromUser = async (user) => {
     let transactions = [];
-    const buyer = await getDocs(query(collection(firestore, 'Transaction'), where('Buyer', '==', user.email)));
-    const seller = await getDocs(query(collection(firestore, 'Transaction'), where('Seller', '==', user.email)));
+    const buyer = await getDocs(query(collection(firestore, 'Transaction'), where('Buyer', '==', user)));
+    const seller = await getDocs(query(collection(firestore, 'Transaction'), where('Seller', '==', user)));
 
     buyer.forEach((item) => {
         transactions.push({ Id: item.id, Type: 'Bought', ...item.data() });
@@ -71,7 +71,6 @@ export const addItemToUser = async (ipfsLink, user) =>{
 };
 
 export const removeItemFromUser = async (ipfsLink, owner) => {
-    //TODO: retrieve the item's owner.
     let imagesCollection = collection(firestore, 'Users', owner, 'images')
     await deleteDoc(doc(imagesCollection, ipfsLink));
 };

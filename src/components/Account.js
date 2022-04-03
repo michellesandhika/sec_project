@@ -28,8 +28,8 @@ function Account() {
     const [ dialog, setDialog ] = useState(false);
 
     useEffect(() => {
-        getItemsFromUser(user).then(content => setItems(content));
-        getTransactionsFromUser(user).then(content => setTransactions(content));
+        getItemsFromUser(user.email).then(content => setItems(content));
+        getTransactionsFromUser(user.email).then(content => setTransactions(content));
     }, [user]);
 
     const deleteAccount = () => {

@@ -12,16 +12,19 @@ const app = express();
 
 app.use(cors({
     // origin: 'http://localhost:3000',
-    // origin: 'http://127.0.0.1:3000',
-    origin: 'https://security-ce24b.web.app',
+    origin: 'http://127.0.0.1:3000',
+    // origin: 'https://security-ce24b.web.app',
     methods: ['GET', 'POST'],
     responseHeader: 'Content-Type',
 }));
 
 app.use(express.json());
 
-
 // stripe routes
+app.post('/', async (request, response) => {
+    response.status(201).send('Successfully Connected');   
+});
+
 app.post('/setup', async (request, response) => {
     const setupIntent = await stripe.setupIntents.create({
         payment_method_types: ['card'],
@@ -56,5 +59,4 @@ app.post('/verify', async (request, response) => {
 
 
 // exports
-exports.stripe = functions.https.onRequest(app);
-exports.captcha = functions.https.onRequest(app);
+exports.services = functions.https.onRequest(app);

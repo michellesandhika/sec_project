@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import styled from '@emotion/styled';
 
-import { getItem, changingOwnership } from '../services/firestore';
+import { getItem } from '../services/firestore';
 import { createIPFSLink } from '../services/utilities';
 import { useStateContext } from '../services/StateContext';
 
@@ -82,9 +82,6 @@ function ProductDescriptionPage() {
         });
 
         setDialog(true);
-        
-        // TODO: move to stripe form 
-        changingOwnership(info.Owner, user.email, id);
     };
 
     return (

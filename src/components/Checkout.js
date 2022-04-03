@@ -26,12 +26,12 @@ function Checkout() {
 
     useEffect(() => {
         const getsecret = async () => {
-            if (menu !== 1)
+            if (menu !== 1 || getSubtotal(cart) === 0)
                 return;
 
             const response = await axios({ 
                 method: 'POST', 
-                url: `/stripe/payment?total=${getSubtotal(cart) * 100}`,
+                url: `/payment?total=${getSubtotal(cart) * 100}`,
             });
             
             setSecret(response.data.secret);

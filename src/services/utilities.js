@@ -3,7 +3,7 @@ import axios from './axios';
 export const verifyCaptcha = async (value) => {
     const response = await axios({ 
         method: 'POST', 
-        url: `/captcha/verify?token=${value}`,
+        url: `/verify?token=${value}`,
     });
 
     return response.data;

@@ -8,12 +8,15 @@ import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import axios from '../services/axios';
 import { verifyCaptcha } from '../services/utilities';
 import { changingOwnership } from '../services/firestore';
+import { useStateContext } from '../services/StateContext';
 import '../styles/StripeForm.css';
 
 function StripeForm({ secret }) {
     const stripe = useStripe();
     const elements = useElements();
+
     const navigate = useNavigate();
+    const [ { cart, user }, dispatch ] = useStateContext();
     
     const [ captcha, setCaptcha ] = useState();
     const [ message, setMessage ] = useState();
@@ -31,23 +34,32 @@ function StripeForm({ secret }) {
         const { error } = await stripe.confirmPayment({ 
             elements,
             confirmParams: {
-                // return_url: 'http://localhost:3000',
-                return_url: 'https://security-ce24b.web.app',
+                return_url: 'http://120.0.0.1:3000',
+                // return_url: 'https://security-ce24b.web.app',
             },
             redirect: 'if_required',
         });
 
-        //TODO: modify the user permission here
+        if (!error) {
+            for (const item of cart) {
+                changingOwnership(item.Owner, user.email, item.Id);
+            }
+
+            dispatch({
+                type: 'EMPTY_CART',
+            });
+
+            setLoading(false);
+            navigate('/account');
+        }
 
         setMessage(error ? error.message : null);
-        setLoading(false);
-        navigate('/');
     };
 
     const handleCancel = async () => {
         const response = await axios({ 
             method: 'POST', 
-            url: `/stripe/cancel?secret=${secret.split('_secret')[0]}`,
+            url: `/cancel?secret=${secret.split('_secret')[0]}`,
         });
 
         navigate('/');
