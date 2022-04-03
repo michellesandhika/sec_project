@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+
 import './App.css';
 
+import auth from './firebaseconf';
+import {signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  const GoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider)
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      console.log(credential)
+    } catch (e) {
+      console.log(e.code, e.message)
+    }
+  }
+  return ( 
+    <>
+    <button onClick={GoogleLogin}>
+      Hello wdorld
+    </button>
+    </>);
 }
 
 export default App;
