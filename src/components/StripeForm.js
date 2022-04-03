@@ -6,8 +6,9 @@ import axios from '../services/axios';
 import { Button, Alert } from '@mui/material';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-import '../styles/StripeForm.css';
+import { verifyCaptcha } from '../services/utilities'
 import { changingOwnership } from '../services/firestore';
+import '../styles/StripeForm.css';
 
 function StripeForm({ secret }) {
     const stripe = useStripe();
@@ -19,11 +20,10 @@ function StripeForm({ secret }) {
     const [ loading, setLoading ] = useState(false);
 
     const handleSubmit = async (e) => {
-        // TODO: uncommit before hosting
-        // if (!captcha) {
-        //     setMessage("Please verify that you're not a robot.");
-        //     return;
-        // }
+        if (!captcha) {
+            setMessage("Please verify that you're not a robot.");
+            return;
+        }
 
         e.preventDefault();
         setLoading(true);
@@ -31,7 +31,8 @@ function StripeForm({ secret }) {
         const { error } = await stripe.confirmPayment({ 
             elements,
             confirmParams: {
-                return_url: 'http://localhost:3000',    // TODO: change to domain after hosted
+                // return_url: 'http://localhost:3000',
+                return_url: 'https://security-ce24b.web.app',
             },
             redirect: 'if_required',
         });
@@ -53,8 +54,11 @@ function StripeForm({ secret }) {
         navigate('/');
     };
 
-    const handleCaptcha = (value) => {
-        setCaptcha(value);
+    const handleCaptcha = async (value) => {
+        const success = await verifyCaptcha(value);
+
+        if (success)
+            setCaptcha(value);
       };
 
     return (

@@ -5,7 +5,6 @@
 
 .checkout__container > button {
     float: right;
-
 }
 
 .checkout__review {
@@ -19,6 +18,7 @@
     margin-top: 20px;
 }
 
-.checkout__review > div:last-child > h4 {
-    padding-right: 40px;
+.checkout__review > div:last-child > h3 > span {
+    margin-left: 10px;
+    margin-right: 20px;
 }

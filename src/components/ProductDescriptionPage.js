@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import styled from '@emotion/styled';
 
-import { getItem, getCurrentUser, changingOwnership, getItemOwner } from '../services/firestore';
+import { getItem, changingOwnership } from '../services/firestore';
 import { createIPFSLink } from '../services/utilities';
 import { useStateContext } from '../services/StateContext';
 
@@ -63,7 +63,7 @@ const ArtDescription = styled.div`
 
 function ProductDescriptionPage() {
     const { id } = useParams();
-    const [ {}, dispatch ] = useStateContext();
+    const [ { user }, dispatch ] = useStateContext();
     
     const [ info , setInfo ] = useState([]);
     const [ dialog, setDialog ] = useState(false);
@@ -82,9 +82,7 @@ function ProductDescriptionPage() {
         });
 
         setDialog(true);
-
-        let currentUser = getCurrentUser();
-        changingOwnership(info.Owner, currentUser, id);
+        changingOwnership(info.Owner, user.email, id);
     };
 
     return (

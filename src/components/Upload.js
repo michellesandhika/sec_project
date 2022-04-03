@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { TextField, Button, Alert } from "@mui/material";
@@ -7,7 +8,7 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 import { makeStorageClient } from "../services/ipfs";
-import { useForm } from "react-hook-form";
+import { verifyCaptcha } from "../services/utilities";
 import "../styles/Upload.css";
 
 function Upload() {
@@ -34,7 +35,7 @@ function Upload() {
     const cid = storeFiles(data.filename);
     console.log(cid);
 
-    // TODO: upload firesbase firestore (remove comment after done)
+    // TODO: upload information to firestore (remove comment after done)
     // if there is duplicate
     //     -> setError(false);
     //     -> setMessage('This image has already been uploaded, please upload a new image.');
@@ -42,8 +43,11 @@ function Upload() {
     navigate('/account');
   };
 
-  const handleCaptcha = (value) => {
-    setValue("captcha", value);
+  const handleCaptcha = async (value) => {
+    const success = await verifyCaptcha(value);
+
+    if (success)
+      setValue("captcha", value);
   };
 
   return (
