@@ -82,6 +82,8 @@ function ProductDescriptionPage() {
         });
 
         setDialog(true);
+        
+        // TODO: move to stripe form 
         changingOwnership(info.Owner, user.email, id);
     };
 
@@ -98,7 +100,7 @@ function ProductDescriptionPage() {
                 </ButtonContainer>
             </TextContainer>
 
-            <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
+            <Dialog fullWidth={true} maxWidth='xs' open={dialog} onClose={() => setDialog(false)}>
                 <DialogTitle id='alert-dialog-title'>Success</DialogTitle>
                 <DialogContent>
                     <DialogContentText id='alert-dialog-description'>Item has been added to the cart.</DialogContentText>

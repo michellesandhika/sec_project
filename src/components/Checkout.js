@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Button } from '@mui/material';
+import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import GoogleIcon from '@mui/icons-material/Google';
 
 import StripeForm from './StripeForm';
-import '../styles/Checkout.css';
 
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useStateContext } from '../services/StateContext';
 import { getSubtotal } from '../services/StateReducer';
+import '../styles/Checkout.css';
 
 import axios from '../services/axios';
 import { Elements } from '@stripe/react-stripe-js';
@@ -15,10 +17,12 @@ const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
 
 function Checkout() {
     const lastStep = 1;
-    const [ { cart }, dispatch ] = useStateContext();
+    const auth = getAuth();
+    const [ { cart, user }, dispatch ] = useStateContext();
     
     const [ menu, setMenu ] = useState(0);
     const [ secret, setSecret ] = useState('');
+    const [ dialog, setDialog ] = useState(false);
 
     useEffect(() => {
         const getsecret = async () => {
@@ -31,7 +35,6 @@ function Checkout() {
             });
             
             setSecret(response.data.secret);
-            console.log('secret: ', response.data.secret);
         };
         
         getsecret();
@@ -47,13 +50,41 @@ function Checkout() {
     };
 
     const removeItem = (item) => {
-        console.log('remove:', item);   
-
         dispatch({
             type: 'REMOVE_CART',
             item: item,
         });
     };
+
+    const nextStep = (step) => {
+        if (!user) {
+            setDialog(true);
+            return
+        }
+
+        setMenu(step);
+    };
+
+    const googleLogin = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;   
+    
+            dispatch({
+                type: 'SET_USER',
+                user: auth.currentUser,
+            });
+
+            setDialog(false);
+        } 
+        catch (error) {
+            const { code, message } = error;
+            console.log(code, message);
+        };
+      };
 
     return (
         <main className='checkout__container'>
@@ -95,7 +126,18 @@ function Checkout() {
                 </Elements>}
             </div>}
 
-            {menu < lastStep && cart.length > 0 && <Button onClick={() => setMenu(menu + 1)} variant='contained'>Next</Button>}
+            {menu < lastStep && cart.length > 0 && <Button onClick={() => nextStep(menu + 1)} variant='contained'>Next</Button>}
+
+            <Dialog fullWidth={true} maxWidth='xs' open={dialog} onClose={() => setDialog(false)}>
+                <DialogTitle id='alert-dialog-title'>Error</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id='alert-dialog-description'>Please sign up first before checking out.</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDialog(false)} variant='outlined'>Close</Button>
+                    <Button onClick={() => googleLogin()} startIcon={<GoogleIcon />} variant='contained'>Sign up with Google</Button>
+                </DialogActions>
+            </Dialog>
         </main>
     );
 }

@@ -50,7 +50,6 @@ function StripeForm({ secret }) {
             url: `/stripe/cancel?secret=${secret.split('_secret')[0]}`,
         });
 
-        console.log('payment status: ', response.data.status);
         navigate('/');
     };
 

@@ -30,22 +30,19 @@ function Account() {
     useEffect(() => {
         getItemsFromUser(user).then(content => setItems(content));
         getTransactionsFromUser(user).then(content => setTransactions(content));
-    }, []);
-
-    console.log(items);
-    console.log(transactions);
+    }, [user]);
 
     const deleteAccount = () => {
         if (input !== 'confirm') 
             return;
         
         deleteUser(user).then(() => {
-            console.log('user deleted');
-
+            
             // TODO: delete user's table? what abt art pieces owned by the user?
             
         }).catch((error) => {
-            console.log(error.code, error.message);
+            const { code, message } = error;
+            console.log(code, message);
         });
     };
     
@@ -136,7 +133,7 @@ function Account() {
                 <Dialog open={dialog} onClose={() => setDialog(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
                     <DialogTitle id='alert-dialog-title'>Delete Account Confirmation</DialogTitle>
                     <DialogContent>
-                        <DialogContentText id='alert-dialog-description'>This action cannot be undone. Enter confirm to confirm you want to delete this account.</DialogContentText>
+                        <DialogContentText id='alert-dialog-description'>This action cannot be undone. Enter <i>confirm</i> to confirm you want to delete this account.</DialogContentText>
                         <TextField label='Confirmation' type='text' onChange={(e) => setInput(e.target.value)} style={{ marginTop: '25px' }} fullWidth autoFocus />
                     </DialogContent>
                     <DialogActions>

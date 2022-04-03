@@ -7,33 +7,34 @@ import { useStateContext } from '../services/StateContext';
 import '../styles/Authentication.css';
 
 function Authentication() {
-  const auth = getAuth();
-  const [ {}, dispatch ] = useStateContext();
+    const auth = getAuth();
+    const [ {}, dispatch ] = useStateContext();
 
-  const GoogleLogin = async () => {
-    try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;   
+    const googleLogin = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;   
 
-        dispatch({
-            type: 'SET_USER',
-            user: auth.currentUser,
-        });
-    } 
-    catch (error) {
-        console.log(error.code, error.message);
+            dispatch({
+                type: 'SET_USER',
+                user: auth.currentUser,
+            });
+        } 
+        catch (error) {
+            const { code, message } = error;
+            console.log(code, message);
+        };
     };
-  };
 
-  return (
-    <main className='authentication__container'>
-        <h1>Sign up</h1>
-        <Button onClick={() => GoogleLogin()} startIcon={<GoogleIcon />} variant='outlined' size='large'>Sign up with Google</Button>
-    </main>
-  );
+    return (
+        <main className='authentication__container'>
+            <h1>Sign up</h1>
+            <Button onClick={() => googleLogin()} startIcon={<GoogleIcon />} variant='outlined' size='large'>Sign up with Google</Button>
+        </main>
+    );
 }
 
 export default Authentication;

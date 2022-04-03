@@ -31,7 +31,6 @@ export const getItemsFromUser = async (user) => {
         items.push({ Id: item.id, ...item.data()});
     }
 
-    console.log(items);
     return items;
 };
 
