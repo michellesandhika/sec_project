@@ -6,7 +6,7 @@ function Authentication() {
     return (
         <main className='authentication__container'>
             <h1>Sign up</h1>
-            <GoogleAuthentication />
+            <GoogleAuthentication size='large' />
         </main>
     );
 }

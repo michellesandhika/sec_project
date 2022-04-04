@@ -17,6 +17,10 @@ export const StateReducer = (state, action) => {
             nCart.push({ Id: action.id, ...action.item, });
             return { ...state, cart: nCart };
 
+        case 'FILTER_CART': 
+            nCart = nCart.filter(item => item.Owner !== action.user.email);
+            return { state, user: action.user, cart: nCart };
+
         case 'REMOVE_CART': 
             const indexRemove = state.cart.findIndex(item => item.Id === action.item.Id);
 

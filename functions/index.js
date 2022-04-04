@@ -11,7 +11,6 @@ const stripe = require('stripe')(process.env.SECRET_KEY);
 const app = express();
 
 app.use(cors({
-    // origin: 'http://localhost:3000',
     // origin: 'http://127.0.0.1:3000',
     origin: 'https://security-ce24b.web.app',
     methods: ['GET', 'POST'],

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAuth, signOut, deleteUser, EmailAuthProvider } from 'firebase/auth';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getAuth, signOut, deleteUser } from 'firebase/auth';
 
 import { Button, Table, TableHead, TableBody, TableRow, TableCell, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -21,6 +21,7 @@ function Account() {
     const [ { user }, dispatch ] = useStateContext();
 
     const auth = getAuth();
+    const location = useLocation();
     const navigate = useNavigate();
 
     const [ menu, setMenu ] = useState(0);
@@ -34,7 +35,7 @@ function Account() {
     useEffect(() => {
         getItemsFromUser(user.email).then(content => setItems(content));
         getTransactionsFromUser(user.email).then(content => setTransactions(content));
-    }, [user]);
+    }, [location.pathname, user]);
 
     const handleDelete = async () => {
         if (!credential)
@@ -72,8 +73,7 @@ function Account() {
     };
 
     const navigatetoID = (id) => {
-        const pathName = '/productdescription/' + id
-        navigate(pathName);   
+        navigate(`/product/${id}`);
     };
 
     return ( 
@@ -148,7 +148,7 @@ function Account() {
                     <DialogContent>
                         <DialogContentText id='alert-dialog-description'>This action cannot be undone. Please sign in again confirm you want to delete this account.</DialogContentText>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
-                            <GoogleAuthentication mode='reauth' setCredential={setCredential} />
+                            <GoogleAuthentication size='medium' mode='reauth' setCredential={setCredential} />
                         </div>
                     </DialogContent>
                     <DialogActions>

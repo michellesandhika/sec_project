@@ -6,7 +6,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { checkDuplicateUsers, addUserToDatabase } from '../services/firestore';
 import { useStateContext } from '../services/StateContext';
 
-function GoogleAuthentication({ mode, setCredential }) {
+function GoogleAuthentication({ size, mode, setCredential }) {
     const auth = getAuth();
     const [ {}, dispatch ] = useStateContext();
 
@@ -14,9 +14,7 @@ function GoogleAuthentication({ mode, setCredential }) {
         try {
             const provider = new GoogleAuthProvider();
             const result = await signInWithPopup(auth, provider);
-            
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
 
             if (mode === 'reauth')
                 setCredential(credential);
@@ -39,7 +37,7 @@ function GoogleAuthentication({ mode, setCredential }) {
     };
 
     return (
-        <Button onClick={() => googleLogin()} startIcon={<GoogleIcon />} variant='outlined' size='large'>Sign up with Google</Button>
+        <Button onClick={() => googleLogin()} startIcon={<GoogleIcon />} variant='outlined' size={size}>Sign up with Google</Button>
     );
 }
 

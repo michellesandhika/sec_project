@@ -38,6 +38,16 @@ function Checkout() {
         getsecret();
     }, [menu, cart]);
 
+    useEffect(() => {
+        if (user) {
+            setDialog(false);
+            dispatch({
+                type: 'FILTER_CART',
+                user: user,
+            });
+        }
+    }, [user, dispatch]);
+
     const appearance = {
         theme: 'stripe',
     };
@@ -112,7 +122,7 @@ function Checkout() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setDialog(false)} variant='outlined'>Close</Button>
-                    <GoogleAuthentication />
+                    <GoogleAuthentication size='medium' />
                 </DialogActions>
             </Dialog>
         </main>

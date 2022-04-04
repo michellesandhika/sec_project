@@ -33,16 +33,25 @@ export const createTransactionRecord = async (record) => {
 };
 
 export const removeTransactions = async (user) => {
-    let transactions = [];
-    const response = await getDocs(query(collection(firestore, 'Transaction'), where('Buyer', '==', user)));
+    let buys = [];
+    let sells = [];
 
-    response.forEach((item) => {
-        transactions.push(item.id);
+    const buyer = await getDocs(query(collection(firestore, 'Transaction'), where('Buyer', '==', user)));
+    const seller = await getDocs(query(collection(firestore, 'Transaction'), where('Seller', '==', user)));
+
+    buyer.forEach((item) => {
+        buys.push(item.id);
     });
 
-    for (const transaction of transactions) {
-        await deleteDoc(doc(collection(firestore, 'Transaction'), transaction));
-    }
+    seller.forEach((item) => {
+        sells.push(item.id);
+    });
+
+    for (const transaction of buys) 
+        await updateDoc(doc(firestore, 'Transaction', transaction), { 'Buyer': 'deleted user' });
+
+    for (const transaction of sells) 
+        await updateDoc(doc(firestore, 'Transaction', transaction), { 'Seller': 'deleted user' });
 };
 
 export const createItem = async (id, content) => {

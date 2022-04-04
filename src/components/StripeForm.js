@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import { Button, Alert } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import axios from '../services/axios';
@@ -47,6 +48,10 @@ function StripeForm({ secret }) {
                     Seller: item.Owner,
                     Paid: item.Price,
                     Time: new Date(),
+                    Item: {
+                        Id: item.Id,
+                        Title: item.Title,
+                    },
                 }
 
                 createTransactionRecord(record);
@@ -65,7 +70,7 @@ function StripeForm({ secret }) {
     };
 
     const handleCancel = async () => {
-        const response = await axios({ 
+        await axios({ 
             method: 'POST', 
             url: `/cancel?secret=${secret.split('_secret')[0]}`,
         });
@@ -88,7 +93,7 @@ function StripeForm({ secret }) {
                 <ReCAPTCHA sitekey='6LdRy_0eAAAAAL08kTosI_LnAgBf8SDI_XSiWvQz' onChange={handleCaptcha} />
                 <div>
                     <Button type='button' onClick={handleCancel} variant='outlined' disabled={loading || !stripe || !elements}>Cancel</Button>
-                    <Button type='submit' variant='contained' disabled={loading || !stripe || !elements}>Confirm Purchase</Button>
+                    <LoadingButton type='submit' variant='contained' loading={loading} disabled={!stripe || !elements}>Confirm Purchase</LoadingButton>
                 </div>
             </div>
         </form>
