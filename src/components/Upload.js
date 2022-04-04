@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
-import { checkDuplicates, createItem, addItemToUser } from '../services/firestore'
+import { checkDuplicateItems, createItem, addItemToUser } from '../services/firestore'
 import { verifyCaptcha } from '../services/utilities';
 import { makeStorageClient } from '../services/ipfs';
 import { useStateContext } from '../services/StateContext';
@@ -39,7 +39,7 @@ function Upload() {
 
         setLoading(true);
         const cid = await storeFiles(data.filename);
-        const duplicates = await checkDuplicates(cid);
+        const duplicates = await checkDuplicateItems(cid);
         
         if (duplicates) {
             setError(true);

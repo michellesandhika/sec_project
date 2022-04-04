@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import GoogleIcon from '@mui/icons-material/Google';
 
 import StripeForm from './StripeForm';
+import GoogleAuthentication from './GoogleAuthentication';
 
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useStateContext } from '../services/StateContext';
 import { getSubtotal } from '../services/StateReducer';
 import '../styles/Checkout.css';
@@ -17,7 +16,6 @@ const promise = loadStripe(process.env.REACT_APP_PUBLIC_KEY);
 
 function Checkout() {
     const lastStep = 1;
-    const auth = getAuth();
     const [ { cart, user }, dispatch ] = useStateContext();
     
     const [ menu, setMenu ] = useState(0);
@@ -64,27 +62,6 @@ function Checkout() {
 
         setMenu(step);
     };
-
-    const googleLogin = async () => {
-        try {
-            const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
-            
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;   
-    
-            dispatch({
-                type: 'SET_USER',
-                user: auth.currentUser,
-            });
-
-            setDialog(false);
-        } 
-        catch (error) {
-            const { code, message } = error;
-            console.log(code, message);
-        };
-      };
 
     return (
         <main className='checkout__container'>
@@ -135,7 +112,7 @@ function Checkout() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setDialog(false)} variant='outlined'>Close</Button>
-                    <Button onClick={() => googleLogin()} startIcon={<GoogleIcon />} variant='contained'>Sign up with Google</Button>
+                    <GoogleAuthentication />
                 </DialogActions>
             </Dialog>
         </main>
