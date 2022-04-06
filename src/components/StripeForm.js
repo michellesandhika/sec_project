@@ -36,7 +36,8 @@ function StripeForm({ secret }) {
             elements,
             confirmParams: {
                 // return_url: 'http://120.0.0.1:3000',
-                return_url: 'https://security-ce24b.web.app',
+                // return_url: 'https://security-ce24b.web.app',
+                return_url: 'https://freelogo.studio',
             },
             redirect: 'if_required',
         });
